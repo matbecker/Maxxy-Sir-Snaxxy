@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c6e62b41547df417bbaf5fe1e6f1af81
+timeCreated: 1492888642
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Hello Larry
+  fontNames:
+  - Hello Larry
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
