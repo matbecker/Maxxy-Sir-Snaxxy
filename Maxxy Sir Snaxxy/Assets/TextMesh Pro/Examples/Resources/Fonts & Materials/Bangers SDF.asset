@@ -89,7 +89,7 @@ Material:
       data:
         first:
           name: _ScaleRatioC
-        second: .909090936
+        second: .795454562
       data:
         first:
           name: _TextureWidth
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74dfce233ddb29b4294c3e23c1d3650d, type: 3}
+  m_Script: { fileID: -667331979, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: Bangers SDF
   m_EditorClassIdentifier: 
   hashCode: 2134875903
@@ -227,8 +227,10 @@ MonoBehaviour:
     SubSize: .5
     Underline: -12.2200003
     UnderlineThickness: 5
+    strikethrough: 40.625
+    strikethroughThickness: 0
     TabWidth: 342.5
-    Padding: 0
+    Padding: 10
     AtlasWidth: 1024
     AtlasHeight: 1024
   atlas: {fileID: 2800000}

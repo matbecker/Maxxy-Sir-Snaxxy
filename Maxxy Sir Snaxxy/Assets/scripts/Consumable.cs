@@ -37,19 +37,8 @@ public class Consumable : MonoBehaviour {
 		{
 			transform.DOScale (Vector3.zero, 1.0f).OnComplete(() => 
 			{
-					//if a good consumable has made this far my combo is over
-					if (type == Type.Fruit)
-					{
-						Character.instance.combo = 0;
-						UserInterface.instance.combo.DOColor(Color.clear, 0.5f);
-						GameManager.instance.SetMultiplier();
-						//increase strikes
-						GameManager.instance.strikes++;
-						if (GameManager.instance.CheckStrikes ()) 
-							GameManager.instance.GameOver ();
-					}
-					mySequence.sequenceConsumables.Remove(this);
-					Destroy(gameObject);
+				mySequence.sequenceConsumables.Remove(this);
+				Destroy(gameObject);
 			});
 		}
 	}
@@ -59,46 +48,13 @@ public class Consumable : MonoBehaviour {
 
 		if (max != null) 
 		{
-			switch (type) 
+			transform.DOScale (Vector3.zero, 0.5f).OnComplete(() => 
 			{
-			case Type.Fruit:
-				if (max.combo == 0)
-					UserInterface.instance.combo.DOColor (Color.white, 0.5f);
-				//increase score
-				max.score += value;
-				max.combo++;
-				break;
-			case Type.Vegetable:
-				max.score += value;
-				max.combo = 0;
-				//increase strikes
-				GameManager.instance.strikes++;
-				if (GameManager.instance.CheckStrikes ()) 
-					GameManager.instance.GameOver ();
-				break;
-			case Type.Cracker:
-				max.combo++;
-				max.currentSize -= 0.2f;
-				max.Resize ();
-				break;
-			case Type.Treat:
-				max.combo++;
-				max.score += value;
-				max.currentSize += fatness;
-				max.Resize ();
-				break;
-			case Type.Dud:
-				break;
-			}
-			UserInterface.instance.combo.text = max.combo.ToString ();
-			UserInterface.instance.score.text = max.score.ToString();
-			UserInterface.instance.BumpText (UserInterface.instance.combo);
-			UserInterface.instance.BumpText (UserInterface.instance.score);
-			GameManager.instance.SetMultiplier ();
-			//remove from consumable list
-			mySequence.sequenceConsumables.Remove (this);
-			//destroy gameobject
-			Destroy (gameObject);
+				//remove from consumable list
+				mySequence.sequenceConsumables.Remove (this);
+				//destroy gameobject
+				Destroy (gameObject);
+			});
 		}
 	}
 }

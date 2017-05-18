@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{6BD1228F-59EE-1CAA-AAB1-56B2CD8634CF}</ProjectGuid>
+    <ProjectGuid>{1AE03B30-404F-872B-60EE-977DFF9E63E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_5_6_0;UNITY_5_6;UNITY_5;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_RUNTIME_NAVMESH_BUILDING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;INCLUDE_DYNAMIC_GI;INCLUDE_GI;PLATFORM_SUPPORTS_MONO;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_SCRIPTING_NEW_CSHARP_COMPILER;ENABLE_VIDEO;UNITY_ANDROID;ENABLE_SUBSTANCE;UNITY_ANDROID_API;ENABLE_EGL;ENABLE_NETWORK;ENABLE_RUNTIME_GI;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;PLATFORM_SUPPORTS_ADS_ID;UNITY_CAN_SHOW_SPLASH_SCREEN;ENABLE_VR;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_HAS_GOOGLEVR</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_5_6_0;UNITY_5_6;UNITY_5;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_RUNTIME_NAVMESH_BUILDING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;INCLUDE_DYNAMIC_GI;INCLUDE_GI;PLATFORM_SUPPORTS_MONO;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_SCRIPTING_NEW_CSHARP_COMPILER;ENABLE_VIDEO;UNITY_ANDROID;ENABLE_SUBSTANCE;UNITY_ANDROID_API;ENABLE_EGL;ENABLE_NETWORK;ENABLE_RUNTIME_GI;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;PLATFORM_SUPPORTS_ADS_ID;UNITY_CAN_SHOW_SPLASH_SCREEN;ENABLE_VR;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE;TMP_PRESENT;UNITY_HAS_GOOGLEVR</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
@@ -54,12 +54,16 @@
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark03.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark04.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\CameraController.cs" />
-     <Compile Include="Assets\TextMesh Pro\Examples\Scripts\FloatingText.cs" />
+     <Compile Include="Assets\TextMesh Pro\Examples\Scripts\ChatController.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\ObjectSpin.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\ShaderPropAnimator.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\SimpleScript.cs" />
+     <Compile Include="Assets\TextMesh Pro\Examples\Scripts\SkewTextExample.cs" />
+     <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_DigitValidator.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_ExampleScript_01.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_FrameRateCounter.cs" />
+     <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_TextEventCheck.cs" />
+     <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_TextEventHandler.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_TextInfoDebugTool.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_TextSelector_A.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_TextSelector_B.cs" />
@@ -75,47 +79,6 @@
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\VertexShakeB.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\VertexZoom.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\WarpTextExample.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\FastAction.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\InlineGraphic.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\InlineGraphicManager.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\MaterialReferenceManager.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Asset.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_ColorGradient.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Compatibility.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_CoroutineTween.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_DefaultControls.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Dropdown.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_FontAsset.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_InputField.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_LineInfo.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_ListPool.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_MaterialManager.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_MeshInfo.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_ObjectPool.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Settings.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Sprite.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_SpriteAsset.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Style.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_StyleSheet.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_SubMesh.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_SubMeshUI.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Text.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_TextElement.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_TextInfo.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_TextUtilities.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_UpdateManager.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_UpdateRegistery.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMP_XmlTagStack.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_EventManager.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_ExtensionMethods.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_FontUtilities.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_MeshUtilities.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_Private.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_ShaderUtilities.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_UGUI_Private.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TextContainer.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TextMeshPro.cs" />
-     <Compile Include="Assets\TextMesh Pro\Scripts\TextMeshProUGUI.cs" />
      <Compile Include="Assets\scripts\Boundary.cs" />
      <Compile Include="Assets\scripts\CameraBehaviour.cs" />
      <Compile Include="Assets\scripts\Character.cs" />
@@ -131,6 +94,7 @@
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\DemiGiant\DOTweenPro\readme.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Fonts\Anton OFL.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
      <None Include="Assets\DemiGiant\DemiLib\Core\DemiLib.xml" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
@@ -142,14 +106,20 @@
      <None Include="Assets\DemiGiant\DOTween\DOTween46.xml" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
+     <None Include="Assets\TextMesh Pro\Fonts\Oswald-Bold - OFL.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
      <None Include="Assets\DemiGiant\DOTween\readme.txt" />
      <None Include="Assets\DemiGiant\DOTween\DOTween43.xml" />
+     <None Include="Assets\TextMesh Pro\Fonts\Bangers - OFL.txt" />
      <None Include="Assets\DemiGiant\DemiLib\Core\Editor\DemiEditor.xml" />
+ <Reference Include="Facebook.Unity.Settings">
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -172,22 +142,25 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
  </Reference>
  <Reference Include="DemiLib">
- <HintPath>/Users/kyle/Desktop/Uncalm Tom/Assets/DemiGiant/DemiLib/Core/DemiLib.dll</HintPath>
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Assets/DemiGiant/DemiLib/Core/DemiLib.dll</HintPath>
  </Reference>
  <Reference Include="DOTween">
- <HintPath>/Users/kyle/Desktop/Uncalm Tom/Assets/DemiGiant/DOTween/DOTween.dll</HintPath>
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Assets/DemiGiant/DOTween/DOTween.dll</HintPath>
  </Reference>
  <Reference Include="DOTween43">
- <HintPath>/Users/kyle/Desktop/Uncalm Tom/Assets/DemiGiant/DOTween/DOTween43.dll</HintPath>
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Assets/DemiGiant/DOTween/DOTween43.dll</HintPath>
  </Reference>
  <Reference Include="DOTween46">
- <HintPath>/Users/kyle/Desktop/Uncalm Tom/Assets/DemiGiant/DOTween/DOTween46.dll</HintPath>
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Assets/DemiGiant/DOTween/DOTween46.dll</HintPath>
  </Reference>
  <Reference Include="DOTween50">
- <HintPath>/Users/kyle/Desktop/Uncalm Tom/Assets/DemiGiant/DOTween/DOTween50.dll</HintPath>
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Assets/DemiGiant/DOTween/DOTween50.dll</HintPath>
  </Reference>
  <Reference Include="DOTweenPro">
- <HintPath>/Users/kyle/Desktop/Uncalm Tom/Assets/DemiGiant/DOTweenPro/DOTweenPro.dll</HintPath>
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Assets/DemiGiant/DOTweenPro/DOTweenPro.dll</HintPath>
+ </Reference>
+ <Reference Include="TextMeshPro">
+ <HintPath>/Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy/Assets/TextMesh Pro/Plugins/TextMeshPro.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

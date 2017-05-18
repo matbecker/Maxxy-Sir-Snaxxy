@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class UserInterface : MonoBehaviour {
 
 	public static UserInterface instance;
-	public Text score;
-	public Text combo;
-	public Text multiplier;
+//	public Text score;
+	public TextMeshProUGUI score;
+	public TextMeshProUGUI combo;
+	public TextMeshProUGUI multiplier;
 	public Image SizeOMeter;
 
 	void Awake()
@@ -19,7 +21,7 @@ public class UserInterface : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		
+		ResetUI();
 	}
 	
 	// Update is called once per frame
@@ -27,7 +29,7 @@ public class UserInterface : MonoBehaviour {
 	{
 		
 	}
-	public void BumpText(Text t)
+	public void BumpText(TextMeshProUGUI t)
 	{
 		t.rectTransform.DOScale (new Vector3 (t.rectTransform.localScale.x * 1.1f, t.rectTransform.localScale.x * 1.1f, t.rectTransform.localScale.z), 0.2f).SetLoops(2, LoopType.Yoyo).OnComplete(() =>
 		{
@@ -60,6 +62,13 @@ public class UserInterface : MonoBehaviour {
 			SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);
 		}
 	}
+	public void MakeTextDance()
+	{
+		combo.text = Character.instance.combo.ToString ();
+		score.text = Character.instance.score.ToString();
+		BumpText (combo);
+		BumpText (score);
+	}
 	public void ShowGameOverScreen()
 	{
 		GameoverScreen.instance.ShowMenu ();
@@ -68,9 +77,10 @@ public class UserInterface : MonoBehaviour {
 	{
 		GameoverScreen.instance.HideMenu ();
 	}
-	public void ResetText()
+	public void ResetUI()
 	{
-		combo.text = "0";
+		combo.text = "";
+		combo.DOColor(Color.clear,0.0f);
 		score.text = "00";
 		multiplier.text = "";
 		SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);

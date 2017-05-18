@@ -60,9 +60,35 @@ public class Layout : MonoBehaviour {
 		return r;
 			
 	}
+	public void AdjustBounds()
+	{
+		foreach (Transform b in bounds)
+		{
+			b.gameObject.SetActive(false);
+		}
+		switch(currentLayout)
+		{
+		case ScreenState.Bottom:
+			bounds[0].gameObject.SetActive(true);
+			break;
+		case ScreenState.Right:
+			bounds[1].gameObject.SetActive(true);
+			break;
+		case ScreenState.Top:
+			bounds[2].gameObject.SetActive(true);
+			break;
+		case ScreenState.Left:
+			bounds[3].gameObject.SetActive(true);
+			break;
+		}
+	}
+	public void SwitchLayout()
+	{
+		AdjustBounds();
+	}
 	// Use this for initialization
 	void Start () 
 	{
-
+		AdjustBounds();
 	}
 }

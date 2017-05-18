@@ -11,6 +11,7 @@ public class GameoverScreen : MonoBehaviour {
 	public Image buttonPanel;
 	public Button[] buttons;
 	public static GameoverScreen instance;
+	public Color backgroundColour;
 	// Use this for initialization
 	void Awake()
 	{
@@ -46,7 +47,7 @@ public class GameoverScreen : MonoBehaviour {
 		}
 		buttonPanel.gameObject.SetActive (true);
 
-		overlay.DOColor (new Color (0, 0, 0, 80), 1.0f).OnComplete(() => {
+		overlay.DOColor (backgroundColour, 1.0f).OnComplete(() => {
 			buttonPanel.transform.DOScaleX(1.0f,1.0f).OnComplete(() => {
 				foreach (Button b in buttons)
 				{
@@ -62,5 +63,9 @@ public class GameoverScreen : MonoBehaviour {
 	public void Retry()
 	{
 		HideMenu ();
+		Character.instance.Reset();
+		GameManager.instance.strikes = 0;
+		UserInterface.instance.ResetUI();
+		SequenceManager.instance.InstantiateSequence();
 	}
 }

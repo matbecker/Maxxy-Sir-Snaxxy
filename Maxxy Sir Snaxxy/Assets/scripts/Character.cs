@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
+using TMPro;
 
 public class Character : MonoBehaviour {
 
@@ -12,6 +14,9 @@ public class Character : MonoBehaviour {
 	[SerializeField] SphereCollider col;
 	[SerializeField] Material mat;
 	[SerializeField] Color[] colours;
+	[SerializeField] TextMeshProUGUI consumableValueText;
+	[SerializeField] Transform consumableValueContainer;
+
 	//stats
 	public float currentSize;
 	public float minSize;
@@ -84,19 +89,54 @@ public class Character : MonoBehaviour {
 		{
 			currentNodeIndex = node.index;
 		}
+
+		var consumable = other.gameObject.GetComponent<Consumable>();
+
+		if (consumable != null)
+		{
+			var type = consumable.type;
+			switch (type) 
+			{
+			case Consumable.Type.Fruit:
+				IncreaseCombo();
+				//increase score
+				score += consumable.value;
+				transform.DOScale (transform.localScale * 1.1f, 0.05f).SetLoops(2,LoopType.Yoyo).OnComplete(() =>
+				{
+					transform.localScale = Vector3.one * currentSize;	
+				});
+				break;
+			case Consumable.Type.Vegetable:
+				score += consumable.value;
+				combo = 0;
+				//increase strikes
+				GameManager.instance.Strike();
+				break;
+			case Consumable.Type.Cracker:
+				IncreaseCombo();
+				currentSize -= 0.2f;
+				Resize ();
+				break;
+			case Consumable.Type.Treat:
+				IncreaseCombo();
+				score += consumable.value;
+				currentSize += consumable.fatness;
+				Resize ();
+				break;
+			case Consumable.Type.Dud:
+				return;
+				break;
+			}
+			DisplayConsumableValue(consumable);
+			UserInterface.instance.MakeTextDance();
+			GameManager.instance.SetMultiplier ();
+		}
+
 	}
 	private void Bounce()
 	{
 		if (!bouncing) 
 		{
-			transform.DOScale (transform.localScale * 1.1f, 0.05f).SetLoops(2,LoopType.Yoyo).OnComplete(() =>
-			{
-				transform.localScale = Vector3.one * currentSize;
-				
-//				if (transform.localScale.x > currentSize)
-//				{
-//				}	
-			});
 			delay = 0.0f;
 			rb.velocity = Vector3.zero;
 			rb.AddForce(bounceForce);
@@ -125,7 +165,7 @@ public class Character : MonoBehaviour {
 		} 
 		else 
 		{
-			transform.DOScale (Vector3.one * currentSize, 1.0f).SetEase (Ease.Linear);
+			transform.DOScale (Vector3.one * currentSize, 1.0f).SetEase (Ease.OutBounce,1.0f,1.0f);
 		}
 		AdjustStats ();
 	}
@@ -167,11 +207,36 @@ public class Character : MonoBehaviour {
 		}
 		UserInterface.instance.AdjustSizeOMeter (this);
 	}
+	public void GameOver()
+	{
+		bounceForce = Vector2.zero;
+	}
 	public void Reset()
 	{
 		score = 0;
+		bounceForce = new Vector2(0.0f,200.0f);
 		currentSize = midSize;
 		transform.localScale = Vector3.one * currentSize;
+	}
+	public void ResetCombo()
+	{
+		combo = 0;
+		UserInterface.instance.combo.DOColor(Color.clear,0.5f);
+	}
+	public void IncreaseCombo()
+	{
+		combo++;
+		if (combo == 1)
+		{
+			UserInterface.instance.combo.DOColor(Color.white,0.5f);
+		}
+	}
+	public void DisplayConsumableValue(Consumable c)
+	{
+		consumableValueText.text = c.value.ToString();
+		consumableValueContainer.transform.DOScale(Vector3.one, 0.5f).OnComplete(() => {
+			consumableValueContainer.transform.DOScale(Vector3.zero, 0.5f).SetDelay(0.5f);
+		});
 	}
 
 }

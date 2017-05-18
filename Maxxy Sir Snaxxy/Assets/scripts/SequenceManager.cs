@@ -20,7 +20,7 @@ public class SequenceManager : MonoBehaviour {
 	}
 	void Start () 
 	{
-		var s = Instantiate (sequenceObj) as Sequence;
+		var s = InstantiateSequence();
 		queuedSequences.Add (s);
 	}
 	
@@ -41,6 +41,10 @@ public class SequenceManager : MonoBehaviour {
 		sequenceMin += 5;
 		sequenceMax += 5;
 
+	}
+	public Sequence InstantiateSequence()
+	{
+		return Instantiate (sequenceObj) as Sequence;
 	}
 	public void Reset()
 	{
@@ -63,4 +67,5 @@ public class SequenceManager : MonoBehaviour {
 			s.isPlaying = false;
 		}
 	}
+
 }

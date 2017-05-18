@@ -20,6 +20,14 @@ public class GameManager : MonoBehaviour {
 	public int strikes;
 	public int maxStrikes;
 
+	public bool gameover
+	{
+		get
+		{
+			return strikes >= maxStrikes;
+		}
+	}
+
 	void Awake()
 	{
 		if (!instance)
@@ -113,17 +121,19 @@ public class GameManager : MonoBehaviour {
 		}
 		SequenceManager.instance.GetCurrentSequence ().SetConsumableValues ();
 	}
-	public bool CheckStrikes()
+	public void Strike()
 	{
-		return strikes > maxStrikes;
+		strikes++;
+		Character.instance.ResetCombo();
+		SetMultiplier();
+
+		if (gameover)
+			GameOver();
 	}
 	public void GameOver()
 	{
 		UserInterface.instance.ShowGameOverScreen ();
-		UserInterface.instance.ResetText ();
 		SequenceManager.instance.ClearSequences ();
-		SequenceManager.instance.Reset ();
-		strikes = 0;
-		Character.instance.Reset ();
+		Character.instance.ResetCombo();
 	}
 }

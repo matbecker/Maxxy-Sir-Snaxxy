@@ -12,11 +12,13 @@ public class Sequence : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		isPlaying = true;
 		SpawnSequence ();
 	}
 	public void SpawnSequence()
 	{
+		if (!isPlaying)
+			isPlaying = true;
+
 		var rand = Random.Range (SequenceManager.instance.sequenceMin, SequenceManager.instance.sequenceMax);
 
 		for (int i = 0; i < rand; i++) 
@@ -42,7 +44,10 @@ public class Sequence : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (isPlaying) {
+		if (!isPlaying) {
+			return;
+		}
+		else{
 			foreach (Consumable c in sequenceConsumables) 
 			{
 				var vel = c.rb.velocity;
@@ -91,6 +96,7 @@ public class Sequence : MonoBehaviour {
 		foreach (Consumable c in sequenceConsumables) {
 			c.transform.DOScale (0, 1.0f).OnComplete (() => {
 				Destroy(c);	
+				Destroy(gameObject);
 			});
 		}
 		sequenceConsumables.Clear ();
