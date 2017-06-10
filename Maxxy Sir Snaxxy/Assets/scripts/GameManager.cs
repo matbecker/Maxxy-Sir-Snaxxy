@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
 			return strikes >= maxStrikes;
 		}
 	}
+	public Dictionary<string, int> highscoreDict;
 
 	void Awake()
 	{
@@ -46,23 +47,30 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		int rand = Random.Range (0, 1000);
-
-		if (rand == 1) 
+		if (!gameover)
 		{
-			var colourIndex = Random.Range (0, backgroundColours.Length);
-			Camera.main.DOColor (backgroundColours [colourIndex], 2.0f);
+			int rand = Random.Range (0, 1000);
 
-			currentColour = HelperFunctions.SetColourType (colourIndex);
-
-			if (!HelperFunctions.CompareColour (Character.instance.colour, currentColour)) 
+			if (rand == 1) 
 			{
-				UserInterface.instance.multiplier.rectTransform.DOScale (Vector3.zero, 0.5f);
+				var colourIndex = Random.Range (0, backgroundColours.Length);
+				Camera.main.DOColor (backgroundColours [colourIndex], 2.0f);
+
+				currentColour = HelperFunctions.SetColourType (colourIndex);
+
+				if (!HelperFunctions.CompareColour (Character.instance.colour, currentColour)) 
+				{
+					UserInterface.instance.multiplier.rectTransform.DOScale (Vector3.zero, 0.5f);
+				}
 			}
 		}
+
 	}
 	public void SetMultiplier()
 	{
+		if (gameover) 
+			return;
+		
 		var c = Character.instance;
 
 		multiplierTween.Kill (false);
@@ -121,14 +129,30 @@ public class GameManager : MonoBehaviour {
 		}
 		SequenceManager.instance.GetCurrentSequence ().SetConsumableValues ();
 	}
-	public void Strike()
+	public void Strike(Consumable consumable)
 	{
 		strikes++;
 		Character.instance.ResetCombo();
-		SetMultiplier();
-
 		if (gameover)
-			GameOver();
+		{
+			//get random index for message list
+			var messageIndex = Random.Range(0,consumable.gameoverMessages.Length);
+			//display error message
+			UserInterface.instance.DisplayFailMessage(consumable.gameoverMessages[messageIndex]).OnComplete(() => 
+			{ 
+				GameOver(); 
+				return;
+			});
+			SetMultiplier();
+
+		}
+	}
+	public void DecreaseStrikes()
+	{
+		strikes--;
+
+		if (strikes < 0)
+			strikes = 0;
 	}
 	public void GameOver()
 	{

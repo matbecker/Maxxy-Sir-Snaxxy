@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\DemiGiant\DOTweenPro\DOTweenAnimation.cs" />
-     <Compile Include="Assets\GameoverScreen.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark01.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark01_UGUI.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark02.cs" />
@@ -84,6 +83,7 @@
      <Compile Include="Assets\scripts\Character.cs" />
      <Compile Include="Assets\scripts\Consumable.cs" />
      <Compile Include="Assets\scripts\GameManager.cs" />
+     <Compile Include="Assets\scripts\GameoverScreen.cs" />
      <Compile Include="Assets\scripts\HelperFunctions.cs" />
      <Compile Include="Assets\scripts\Layout.cs" />
      <Compile Include="Assets\scripts\MobileController.cs" />

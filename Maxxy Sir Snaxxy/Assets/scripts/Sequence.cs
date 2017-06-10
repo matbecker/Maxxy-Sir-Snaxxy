@@ -48,18 +48,11 @@ public class Sequence : MonoBehaviour {
 			return;
 		}
 		else{
-			foreach (Consumable c in sequenceConsumables) 
-			{
-				var vel = c.rb.velocity;
-				vel.Normalize ();
-				c.rb.velocity = (vel * SequenceManager.instance.sequenceSpeed * Time.deltaTime);
-			}
 			if (sequenceConsumables.Count == 0) 
 			{
 				SpawnSequence ();
 			}
 		}
-
 	}
 	public void SetConsumableValues()
 	{
@@ -93,11 +86,10 @@ public class Sequence : MonoBehaviour {
 	}
 	public void EndSequence()
 	{
+		SequenceManager.instance.AdjustSequenceSpeed(10.0f);
 		foreach (Consumable c in sequenceConsumables) {
-			c.transform.DOScale (0, 1.0f).OnComplete (() => {
-				Destroy(c);	
-				Destroy(gameObject);
-			});
+			c.GetComponent<BoxCollider>().enabled = false;
+			Destroy(c, 2.0f);	
 		}
 		sequenceConsumables.Clear ();
 	}

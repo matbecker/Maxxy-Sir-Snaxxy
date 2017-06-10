@@ -20,10 +20,34 @@ public class Boundary : MonoBehaviour {
 
 		if (consumable != null)
 		{
-			if (consumable.type == Consumable.Type.Fruit)
+			var type = consumable.type;
+
+			switch (type)
 			{
-				GameManager.instance.Strike();
+			case Consumable.Type.Vegetable:
+				consumable.NotCollected();
+				break;
 			}
+		}
+	}
+	private void OnTriggerExit(Collider other)
+	{
+		var consumable = other.gameObject.GetComponent<Consumable>();
+
+		if (consumable != null)
+		{
+			var type = consumable.type;
+
+			switch (type)
+			{
+			case Consumable.Type.Fruit:
+				GameManager.instance.Strike(consumable);
+				Character.instance.DisplayInGameFailText(UserInterface.instance.inGameDropText, UserInterface.instance.inGameDropText.Length);
+				//TODO only give the player strike if the fruit hits the bottom of the collider
+				Debug.Log("you dropped the delicious " + consumable.name);
+				break;
+			}
+			consumable.NotCollected();
 		}
 	}
 }

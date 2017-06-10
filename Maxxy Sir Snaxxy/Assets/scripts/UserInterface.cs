@@ -8,11 +8,15 @@ using TMPro;
 public class UserInterface : MonoBehaviour {
 
 	public static UserInterface instance;
-//	public Text score;
 	public TextMeshProUGUI score;
 	public TextMeshProUGUI combo;
 	public TextMeshProUGUI multiplier;
+	public TextMeshProUGUI failText;
+	public string[] inGameFailText;
+	public string[] inGameDropText;
 	public Image SizeOMeter;
+	public string[] skinnyText;
+	public string[] fatText;
 
 	void Awake()
 	{
@@ -36,13 +40,14 @@ public class UserInterface : MonoBehaviour {
 			t.rectTransform.localScale = Vector3.one;		
 		});
 	}
-	public void AdjustSizeOMeter(Character c)
+	public void AdjustSizeOMeter()
 	{
+		var c = Character.instance;
 		if (c.currentSize > c.midSize) {
 			if (SizeOMeter.transform.localScale.y == -1)
 				SizeOMeter.transform.localScale = Vector3.one;
 
-			if (c.currentSize == c.maxSize)
+			if (c.currentSize >= c.maxSize)
 				SizeOMeter.transform.DOScaleY (1.0f, 1.0f);
 			else {
 				var diff = c.currentSize - c.midSize;
@@ -52,7 +57,7 @@ public class UserInterface : MonoBehaviour {
 			if (SizeOMeter.transform.localScale.y == 1)
 				SizeOMeter.transform.localScale = new Vector3(1,-1,1);
 
-			if (c.currentSize == c.minSize)
+			if (c.currentSize <= c.minSize)
 				SizeOMeter.transform.DOScaleY (-1.0f, 1.0f);
 			else {
 				var d = c.midSize - c.currentSize;
@@ -84,5 +89,26 @@ public class UserInterface : MonoBehaviour {
 		score.text = "00";
 		multiplier.text = "";
 		SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);
+		failText.DOColor(Color.clear,0.0f);
+	}
+	public Tween DisplayFailMessage(string message)
+	{
+		failText.text = message;
+		return failText.DOColor(Color.white, 1.0f);
+	}
+	public string GetSizeRelatedFailText(bool skinny)
+	{
+		if (skinny)
+		{
+			var sRand = Random.Range(0,skinnyText.Length);
+
+			return skinnyText[sRand];
+		}
+		else
+		{
+			var fRand = Random.Range(0,fatText.Length);
+
+			return fatText[fRand];
+		}
 	}
 }

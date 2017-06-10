@@ -12,6 +12,7 @@ public class Layout : MonoBehaviour {
 	[System.Serializable]
 	public class Screen
 	{
+		public Transform startPoint;
 		public ScreenState state;
 		public Node[] nodes;
 		public Transform[] columns;
@@ -82,9 +83,20 @@ public class Layout : MonoBehaviour {
 			break;
 		}
 	}
-	public void SwitchLayout()
+	public void SetLayout()
 	{
 		AdjustBounds();
+		switch (currentLayout)
+		{
+		case ScreenState.Bottom:
+			break;
+		case ScreenState.Right:
+			break;
+		case ScreenState.Top:
+			break;
+		case ScreenState.Left:
+			break;
+		}
 	}
 	// Use this for initialization
 	void Start () 

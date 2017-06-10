@@ -28,12 +28,10 @@ public class Character : MonoBehaviour {
 			return (maxSize + minSize) / 2;
 		}
 	}
-	[SerializeField] Vector2 bounceForce;
 	public float moveduration;
 	public int score;
 
 	private Vector3 pos; 
-	private bool bouncing;
 	private float delay;
 	public int combo;
 
@@ -59,27 +57,6 @@ public class Character : MonoBehaviour {
 	void Update () 
 	{
 		pos = Camera.main.WorldToViewportPoint(transform.position);
-
-		if (Layout.instance.currentLayout == Layout.ScreenState.Bottom) 
-		{
-			if (bouncing) 
-			{
-				delay += Time.deltaTime;
-				if (delay > 0.1f) 
-				{
-					bouncing = false;
-				}
-			}
-		}
-	}
-	private void OnCollisionEnter(Collision other)
-	{
-		var boundary = other.gameObject.GetComponent<Boundary> ();
-
-		if (boundary != null && transform.position.y > other.transform.position.y)
-		{
-			Bounce ();
-		}
 	}
 	private void OnTriggerEnter(Collider other)
 	{
@@ -92,7 +69,7 @@ public class Character : MonoBehaviour {
 
 		var consumable = other.gameObject.GetComponent<Consumable>();
 
-		if (consumable != null)
+		if (consumable != null && !consumable.collected)
 		{
 			var type = consumable.type;
 			switch (type) 
@@ -110,7 +87,8 @@ public class Character : MonoBehaviour {
 				score += consumable.value;
 				combo = 0;
 				//increase strikes
-				GameManager.instance.Strike();
+				GameManager.instance.Strike(consumable);
+				Debug.Log("you ate the disgusting " + consumable.name);
 				break;
 			case Consumable.Type.Cracker:
 				IncreaseCombo();
@@ -123,6 +101,10 @@ public class Character : MonoBehaviour {
 				currentSize += consumable.fatness;
 				Resize ();
 				break;
+			case Consumable.Type.Clover:
+				GameManager.instance.DecreaseStrikes();
+				IncreaseCombo();
+				break;
 			case Consumable.Type.Dud:
 				return;
 				break;
@@ -130,18 +112,9 @@ public class Character : MonoBehaviour {
 			DisplayConsumableValue(consumable);
 			UserInterface.instance.MakeTextDance();
 			GameManager.instance.SetMultiplier ();
+			consumable.Collected();
 		}
 
-	}
-	private void Bounce()
-	{
-		if (!bouncing) 
-		{
-			delay = 0.0f;
-			rb.velocity = Vector3.zero;
-			rb.AddForce(bounceForce);
-			bouncing = true;
-		}
 	}
 	public Color NextColour()
 	{
@@ -158,11 +131,24 @@ public class Character : MonoBehaviour {
 	}
 	public void Resize()
 	{
-		if (currentSize > maxSize || currentSize < minSize) 
+		if (currentSize > maxSize) 
 		{
-			GameManager.instance.GameOver ();
-			return;
+			transform.DOScale(Vector3.one * 4.0f, 1.0f).SetEase(Ease.OutElastic, 1.0f,1.0f).OnComplete(() => 
+			{
+				UserInterface.instance.DisplayFailMessage(UserInterface.instance.GetSizeRelatedFailText(false));
+				GameManager.instance.GameOver ();
+				return;
+			});
 		} 
+		else if (currentSize < minSize)
+		{
+			transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.OutElastic,1.0f,1.0f).OnComplete(() => 
+			{ 
+				UserInterface.instance.DisplayFailMessage(UserInterface.instance.GetSizeRelatedFailText(true));
+				GameManager.instance.GameOver(); 
+				return;
+			});
+		}
 		else 
 		{
 			transform.DOScale (Vector3.one * currentSize, 1.0f).SetEase (Ease.OutBounce,1.0f,1.0f);
@@ -173,50 +159,35 @@ public class Character : MonoBehaviour {
 	{
 		if (currentSize <= 0.25f) {
 			moveduration = 0.1f;
-			bounceForce.y = 300.0f;
 		} else if (currentSize >= 0.25f && currentSize < 0.50f) {
 			moveduration = 0.15f;
-			bounceForce.y = 280.0f;
 		} else if (currentSize >= 0.5f && currentSize < 0.75f) {
 			moveduration = 0.2f;
-			bounceForce.y = 260.0f;
 		} else if (currentSize >= 0.75f && currentSize < 1.0f) {
 			moveduration = 0.225f;
-			bounceForce.y = 260.0f;
 		} else if (currentSize >= 1.0f && currentSize < 1.25f) {
 			moveduration = 0.25f;
-			bounceForce.y = 240.0f;
 		} else if (currentSize >= 1.25f && currentSize < 1.50f) {
 			moveduration = 0.275f;
-			bounceForce.y = 220.0f;
 		} else if (currentSize >= 1.5f && currentSize < 1.75f) {
 			moveduration = 0.3f;
-			bounceForce.y = 200.0f;
 		} else if (currentSize >= 1.75f && currentSize < 2.0f) {
 			moveduration = 0.35f;
-			bounceForce.y = 175.0f;
 		} else if (currentSize >= 2.0f && currentSize < 2.25f) {
 			moveduration = 0.4f;
-			bounceForce.y = 150.0f;
 		} else if (currentSize >= 2.25f && currentSize < 2.5f) {
 			moveduration = 0.45f;
-			bounceForce.y = 125.0f;
 		} else if (currentSize >= 2.5f && currentSize < 2.75f) {
 			moveduration = 0.5f;
-			bounceForce.y = 100.0f;
 		}
-		UserInterface.instance.AdjustSizeOMeter (this);
-	}
-	public void GameOver()
-	{
-		bounceForce = Vector2.zero;
+		UserInterface.instance.AdjustSizeOMeter ();
 	}
 	public void Reset()
 	{
 		score = 0;
-		bounceForce = new Vector2(0.0f,200.0f);
 		currentSize = midSize;
 		transform.localScale = Vector3.one * currentSize;
+		transform.position = Layout.instance.GetCurrentScreen().startPoint.position;
 	}
 	public void ResetCombo()
 	{
@@ -233,10 +204,35 @@ public class Character : MonoBehaviour {
 	}
 	public void DisplayConsumableValue(Consumable c)
 	{
-		consumableValueText.text = c.value.ToString();
-		consumableValueContainer.transform.DOScale(Vector3.one, 0.5f).OnComplete(() => {
-			consumableValueContainer.transform.DOScale(Vector3.zero, 0.5f).SetDelay(0.5f);
+		if (GameManager.instance.strikes < GameManager.instance.maxStrikes)
+		{
+			if (c.value != 0)
+			{
+				if (c.value > 0)
+				{
+					consumableValueText.text = c.value.ToString();
+
+					consumableValueText.DOColor(Color.white,0.1f).SetDelay(0.1f).OnComplete(() => 
+					{
+						consumableValueText.DOColor(Color.clear,0.1f).SetDelay(0.1f);
+					});
+				}
+				else 
+				{
+					DisplayInGameFailText(UserInterface.instance.inGameFailText, UserInterface.instance.inGameFailText.Length);
+				}
+			}
+		}
+
+	}
+	public void DisplayInGameFailText(string[] textList, int range)
+	{
+		var rand = Random.Range(0,range);
+		consumableValueText.text = textList[rand];
+
+		consumableValueText.DOColor(Color.white,0.1f).SetDelay(0.1f).OnComplete(() => 
+		{
+			consumableValueText.DOColor(Color.clear,0.1f).SetDelay(0.1f);
 		});
 	}
-
 }
