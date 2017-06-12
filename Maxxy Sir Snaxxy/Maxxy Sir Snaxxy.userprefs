@@ -1,17 +1,17 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/Boundary.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/GameManager.cs">
     <Files>
-      <File FileName="Assets/scripts/Character.cs" Line="180" Column="100" />
-      <File FileName="Assets/scripts/Consumable.cs" Line="21" Column="35" />
-      <File FileName="Assets/scripts/UserInterface.cs" Line="109" Column="26" />
-      <File FileName="Assets/scripts/GameManager.cs" Line="141" Column="4" />
-      <File FileName="Assets/scripts/Layout.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/Consumable.cs" Line="31" Column="3" />
+      <File FileName="Assets/scripts/Character.cs" Line="181" Column="22" />
+      <File FileName="Assets/scripts/UserInterface.cs" Line="30" Column="2" />
+      <File FileName="Assets/scripts/GameManager.cs" Line="30" Column="47" />
+      <File FileName="Assets/scripts/Layout.cs" Line="90" Column="4" />
       <File FileName="Assets/scripts/MobileController.cs" Line="1" Column="1" />
       <File FileName="Assets/scripts/Node.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/SequenceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/Sequence.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/Boundary.cs" Line="46" Column="63" />
+      <File FileName="Assets/scripts/SequenceManager.cs" Line="41" Column="30" />
+      <File FileName="Assets/scripts/Sequence.cs" Line="87" Column="27" />
+      <File FileName="Assets/scripts/Boundary.cs" Line="44" Column="45" />
       <File FileName="Assets/scripts/GameoverScreen.cs" Line="46" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

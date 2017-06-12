@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using System.Linq;
 
 public class UserInterface : MonoBehaviour {
 
@@ -17,6 +18,8 @@ public class UserInterface : MonoBehaviour {
 	public Image SizeOMeter;
 	public string[] skinnyText;
 	public string[] fatText;
+	private Tween colorTween;
+	private Coroutine counter;
 
 	void Awake()
 	{
@@ -24,8 +27,11 @@ public class UserInterface : MonoBehaviour {
 			instance = this;
 	}
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		ResetUI();
+		BounceScore();
+		counter = null;
 	}
 	
 	// Update is called once per frame
@@ -43,36 +49,75 @@ public class UserInterface : MonoBehaviour {
 	public void AdjustSizeOMeter()
 	{
 		var c = Character.instance;
+
+		if (c.currentSize > c.minSize + 0.25f || c.currentSize < c.maxSize - 0.25f)
+		{
+			if (colorTween != null)
+			{
+				colorTween.Kill(true);
+				colorTween = SizeOMeter.DOColor(Color.black, 0.2f); 
+				colorTween = null;
+			}
+		}
+		//if i am bigger than average
 		if (c.currentSize > c.midSize) {
+			//flip the scale of the meter if its upside down
 			if (SizeOMeter.transform.localScale.y == -1)
 				SizeOMeter.transform.localScale = Vector3.one;
 
+			//if i am bigger than i am aloud to be
 			if (c.currentSize >= c.maxSize)
-				SizeOMeter.transform.DOScaleY (1.0f, 1.0f);
+				SizeOMeter.transform.DOScaleY (1.0f, 1.0f); //full size
 			else {
-				var diff = c.currentSize - c.midSize;
-				SizeOMeter.transform.DOScaleY (diff / c.midSize, 1.0f);
+				var diff = c.currentSize - c.midSize; // get the percentage of the bar that needs to be filled
+				SizeOMeter.transform.DOScaleY (diff, 1.0f); //fill that shit
 			}
+		//if i am smaller than average
 		} else if (c.currentSize <= c.midSize) {
+			//flip the scale of the meter if its upside down
 			if (SizeOMeter.transform.localScale.y == 1)
 				SizeOMeter.transform.localScale = new Vector3(1,-1,1);
 
+			//if i am smaller than i am aloud to be
 			if (c.currentSize <= c.minSize)
-				SizeOMeter.transform.DOScaleY (-1.0f, 1.0f);
+				SizeOMeter.transform.DOScaleY (-1.0f, 1.0f); //full negative size
 			else {
 				var d = c.midSize - c.currentSize;
-				SizeOMeter.transform.DOScaleY (-1 * (d / c.midSize), 1.0f);
+				SizeOMeter.transform.DOScaleY (d * -1, 1.0f);
 			}
 		} else {
 			SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);
 		}
+		if (c.currentSize <= c.minSize + 0.25f || c.currentSize >= c.maxSize - 0.25f)
+		{
+			//flash the bar if im close to losing because of my weight
+			 colorTween = SizeOMeter.DOColor(Color.red, 0.2f).SetLoops(-1, LoopType.Yoyo); 
+		}
+	}
+	public IEnumerator ScoreCounter()
+	{
+		for (int i = int.Parse(score.text); i <= Character.instance.score; i++)
+		{
+			score.text = i.ToString();
+
+			var consumableValue = Character.instance.GetLastConsumable().value;
+
+			//var delay = 0.1f;
+
+			yield return new WaitForSeconds(0.001f);
+		}
+		StopCoroutine(ScoreCounter());
+		counter = null;
 	}
 	public void MakeTextDance()
 	{
 		combo.text = Character.instance.combo.ToString ();
-		score.text = Character.instance.score.ToString();
+
+		if (counter == null)
+		{
+			counter = StartCoroutine(ScoreCounter());
+		}
 		BumpText (combo);
-		BumpText (score);
 	}
 	public void ShowGameOverScreen()
 	{
@@ -90,6 +135,10 @@ public class UserInterface : MonoBehaviour {
 		multiplier.text = "";
 		SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);
 		failText.DOColor(Color.clear,0.0f);
+		colorTween.Kill(true);
+		colorTween = SizeOMeter.DOColor(Color.black, 0.2f); 
+		colorTween = null;
+
 	}
 	public Tween DisplayFailMessage(string message)
 	{
@@ -110,5 +159,14 @@ public class UserInterface : MonoBehaviour {
 
 			return fatText[fRand];
 		}
+	}
+	public void BounceScore()
+	{
+		score.transform.DOScaleY(1.2f, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutCubic, 0.5f,0.5f).OnComplete(() => {
+			score.transform.DOScaleX(1.2f, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutCubic, 0.5f,0.5f).OnComplete(() => {
+				score.transform.localScale = Vector3.one;
+				BounceScore();
+			});
+		});
 	}
 }

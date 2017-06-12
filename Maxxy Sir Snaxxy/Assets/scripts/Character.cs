@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class Character : MonoBehaviour {
 
@@ -39,11 +40,14 @@ public class Character : MonoBehaviour {
 	public int colourIndex;
 
 	public static Character instance;
+	public List<Consumable> eatenConsumables;
 
 	void Awake()
 	{
 		if (!instance)
 			instance = this;
+
+		eatenConsumables = new List<Consumable>();
 	}
 	// Use this for initialization
 	void Start () 
@@ -110,6 +114,7 @@ public class Character : MonoBehaviour {
 				break;
 			}
 			DisplayConsumableValue(consumable);
+			eatenConsumables.Add(consumable);
 			UserInterface.instance.MakeTextDance();
 			GameManager.instance.SetMultiplier ();
 			consumable.Collected();
@@ -234,5 +239,10 @@ public class Character : MonoBehaviour {
 		{
 			consumableValueText.DOColor(Color.clear,0.1f).SetDelay(0.1f);
 		});
+	}
+	public Consumable GetLastConsumable()
+	{
+		//Debug.Log(eatenConsumables.Last().name);
+		return eatenConsumables.Last();
 	}
 }
