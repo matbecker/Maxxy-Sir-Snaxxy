@@ -64,7 +64,7 @@ public class GameoverScreen : MonoBehaviour {
 	{
 		HideMenu ();
 		Character.instance.Reset();
-		GameManager.instance.strikes = 0;
+		GameManager.instance.Reset();
 		UserInterface.instance.ResetUI();
 		SequenceManager.instance.Reset();
 	}

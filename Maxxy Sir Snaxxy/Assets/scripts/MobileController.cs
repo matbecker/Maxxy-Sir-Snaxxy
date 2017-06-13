@@ -39,7 +39,7 @@ public class MobileController : MonoBehaviour {
 					if (hit.rigidbody.tag == "Player") 
 					{
 						character.GetComponentInChildren<MeshRenderer> ().material.DOColor (character.NextColour (), 0.75f);
-						character.transform.DORotate (new Vector3 (360.0f, 0.0f, transform.rotation.eulerAngles.z), 0.3f, RotateMode.FastBeyond360).OnComplete (() => {
+						character.transform.DORotate (new Vector3 (360.0f, 0.0f, character.transform.rotation.eulerAngles.z), 0.3f, RotateMode.FastBeyond360).OnComplete (() => {
 							isFlipping = false;			
 						});
 						isFlipping = true;
@@ -63,29 +63,35 @@ public class MobileController : MonoBehaviour {
 
 			
 			Vector3 newPos = Vector3.zero;
-			float rotation = 0;
 
-			if (touchPos.x < 0.5f) 
+			if (Layout.instance.currentLayout == Layout.ScreenState.Bottom || Layout.instance.currentLayout == Layout.ScreenState.Top)
 			{
-				if (character.currentNodeIndex == 0) 
-					return;
-				
-				newPos = Layout.instance.GetPrevNode ().transform.position;
-				rotation = 180.0f;
+				//var nodePos = Camera.main.ScreenToViewportPoint(Character.instance.currentNode.transform.position);
+				if (touchPos.x < 0.5f) 
+				{
+					if (character.currentNode.index == 0) 
+						return;
 
+					newPos = Layout.instance.GetPrevNode ().transform.position;
+				} 
+				if (touchPos.x > 0.5f) 
+				{
+					if (character.currentNode.index == Layout.instance.GetCurrentScreen ().nodes.Length - 1)
+						return;
 
-			} 
-			else 
+					newPos = Layout.instance.GetNextNode ().transform.position;
+				}
+			}
+			else
 			{
-				if (character.currentNodeIndex == Layout.instance.GetCurrentScreen ().nodes.Length - 1)
-					return;
 				
-				newPos = Layout.instance.GetNextNode ().transform.position;
-				rotation = -180.0f;
 			}
 			isMoving = true;
-			moveTween = character.transform.DOMoveX(newPos.x, character.moveduration).OnComplete(() => { isMoving = false; });
-			spinTween = character.transform.DOLocalRotate (new Vector3 (0.0f, 0.0f, character.transform.localRotation.eulerAngles.z + rotation), 0.3f, RotateMode.Fast);
+			moveTween = character.transform.DOMoveX(newPos.x, character.moveduration).OnComplete(() => { 
+				isMoving = false; 
+				Character.instance.StopMoving();
+			});
 		}
+
 	}
 }

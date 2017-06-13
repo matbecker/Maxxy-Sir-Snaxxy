@@ -42,7 +42,7 @@ public class Consumable : MonoBehaviour {
 		{
 			//remove from consumable list
 			mySequence.sequenceConsumables.Remove (this);
-			//destroy gameobject
+
 			Destroy (gameObject);
 		});
 	}

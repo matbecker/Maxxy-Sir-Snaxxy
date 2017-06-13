@@ -1,24 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class GameManager : MonoBehaviour {
 
-	public enum ColourType { Purple, Blue, Green, Yellow, Orange, Red };
+	public enum ColourType { Blank, Purple, Blue, Green, Yellow, Orange, Red };
 	public ColourType currentColour;
 
-	public enum Multiplier { x2, x3, x4, x5, x6, x7, x8, x16 };
+	public enum Multiplier { None, x2, x3, x4, x5, x6, x8, x10 };
 	public Multiplier currentMultiplier;
 
 	public static GameManager instance;
+	public BackgroundQuadrant[] backgroundQuads;
 	public Color[] backgroundColours;
 	public int colourIndex;
 
-	private Tween multiplierTween;
-
 	public int strikes;
 	public int maxStrikes;
+
 
 	public bool gameover
 	{
@@ -37,11 +39,10 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		var colourIndex = Random.Range (0, backgroundColours.Length);
+		var colourIndex = UnityEngine.Random.Range (0, backgroundColours.Length);
 		Camera.main.DOColor (backgroundColours [colourIndex], 0.0f);
 		currentColour = HelperFunctions.SetColourType (colourIndex);
-		SetMultiplier ();
-		multiplierTween = null;
+		SetGamePlayVariables(currentColour);
 	}
 	
 	// Update is called once per frame
@@ -49,85 +50,98 @@ public class GameManager : MonoBehaviour {
 	{
 		if (!gameover)
 		{
-			int rand = Random.Range (0, 1000);
+			int rand = UnityEngine.Random.Range (0, 1000);
 
 			if (rand == 1) 
 			{
-				var colourIndex = Random.Range (0, backgroundColours.Length);
+				var colourIndex = UnityEngine.Random.Range (0, backgroundColours.Length);
 				Camera.main.DOColor (backgroundColours [colourIndex], 2.0f);
 
 				currentColour = HelperFunctions.SetColourType (colourIndex);
-
-				if (!HelperFunctions.CompareColour (Character.instance.colour, currentColour)) 
-				{
-					UserInterface.instance.multiplier.rectTransform.DOScale (Vector3.zero, 0.5f);
-				}
 			}
 		}
 
 	}
-	public void SetMultiplier()
+	public void SetGamePlayVariables(ColourType col)
 	{
-		if (gameover) 
-			return;
-		
 		var c = Character.instance;
 
-		multiplierTween.Kill (false);
-		multiplierTween = null;
-
-		if (!HelperFunctions.CompareColour (Character.instance.colour, currentColour) && c.combo < 10) 
-			multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (Vector3.zero, 0.5f);
-		else if (HelperFunctions.CompareColour (Character.instance.colour, currentColour)) 
+		if (gameover || c.combo < 10)
 		{
-			multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (Vector3.one, 0.5f);
-			UserInterface.instance.multiplier.text = "x2";
-			currentMultiplier = Multiplier.x2;
+			SetMultiplierVariables(Multiplier.None, 0.0f, col);
+			return;
 		}
-
-		if (c.combo >= 10 && c.combo < 25) {
-			if (HelperFunctions.CompareColour (Character.instance.colour, currentColour)) {
-				UserInterface.instance.multiplier.text = "x4";
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (new Vector3 (1.75f, 1.75f, 1.0f), 1.0f);
-				currentMultiplier = Multiplier.x4;
-			} else {
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (Vector3.one, 0.5f);
-				UserInterface.instance.multiplier.text = "x2";
-				currentMultiplier = Multiplier.x2;
+		else
+		{
+			if (c.combo >=  10 && c.combo < 25)
+			{
+				SetMultiplierVariables(Multiplier.x2, 1.0f, col);
 			}
-
-		} else if (c.combo >= 25 && c.combo < 50) {
-			if (HelperFunctions.CompareColour (Character.instance.colour, currentColour)) {
-				UserInterface.instance.multiplier.text = "x6";
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (new Vector3 (2.25f, 2.25f, 1.0f), 1.0f);
-				currentMultiplier = Multiplier.x6;
-			} else {
-				UserInterface.instance.multiplier.text = "x3";
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (new Vector3 (1.5f, 1.5f, 1.0f), 1.0f);
-				currentMultiplier = Multiplier.x3;
+			else if (c.combo >= 25 && c.combo < 50)
+			{
+				SetMultiplierVariables(Multiplier.x3, 1.5f, col);
 			}
-		} else if (c.combo >= 50 && c.combo < 100) {
-			if (HelperFunctions.CompareColour (Character.instance.colour, currentColour)) {
-				UserInterface.instance.multiplier.text = "x8";
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (new Vector3 (2.5f, 2.5f, 1.0f), 1.0f);
-				currentMultiplier = Multiplier.x8;
-			} else {
-				UserInterface.instance.multiplier.text = "x4";
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (new Vector3 (1.75f, 1.75f, 1.0f), 1.0f);
-				currentMultiplier = Multiplier.x4;
+			else if (c.combo >= 50 && c.combo < 100)
+			{
+				SetMultiplierVariables(Multiplier.x4, 2.0f, col);
 			}
-		} else if (c.combo >= 100) {
-			if (HelperFunctions.CompareColour (Character.instance.colour, currentColour)) {
-				UserInterface.instance.multiplier.text = "x16";
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (new Vector3 (3.0f, 3.0f, 1.0f), 1.0f);
-				currentMultiplier = Multiplier.x16;
-			} else {
-				UserInterface.instance.multiplier.text = "x8";
-				multiplierTween = UserInterface.instance.multiplier.rectTransform.DOScale (new Vector3 (2.5f, 2.5f, 1.0f), 1.0f);
-				currentMultiplier = Multiplier.x8;
+			else 
+			{
+				SetMultiplierVariables(Multiplier.x5, 2.5f, col);
 			}
 		}
-		SequenceManager.instance.GetCurrentSequence ().SetConsumableValues ();
+	}
+	public void SetMultiplierVariables(Multiplier m, float mSize, ColourType col)
+	{
+		if (HelperFunctions.CompareColour (Character.instance.colour, col))
+		{
+			mSize += 0.75f;
+			switch (m)
+			{
+			case Multiplier.None:
+				m = Multiplier.x2;
+				Debug.Log("x2");
+				break;
+			case Multiplier.x2:
+				m = Multiplier.x4;
+				Debug.Log("x4");
+				break;
+			case Multiplier.x3:
+				m = Multiplier.x6;
+				Debug.Log("x6");
+				break;
+			case Multiplier.x4:
+				m = Multiplier.x8;
+				Debug.Log("x8");
+				break;
+			case Multiplier.x5:
+				m = Multiplier.x10;
+				Debug.Log("x10");
+				break;
+			}
+		}
+		else
+			Debug.Log(m.ToString());
+		//set the current multiplier
+		currentMultiplier = m;
+		//update the UI Multiplier
+		UserInterface.instance.UpdateMultiplier(currentMultiplier, mSize);
+		//set consumable values
+		SequenceManager.instance.GetCurrentSequence ().SetConsumableValues (m);
+	}
+	public void SetBackgroundImages()
+	{
+		foreach (BackgroundQuadrant bq in backgroundQuads)
+		{
+			var rand = UnityEngine.Random.value;
+			if (rand > 0.5f)
+			{
+				if (bq.isVisible)
+					bq.Dissappear();
+				else
+					bq.Appear();
+			}
+		}
 	}
 	public void Strike(Consumable consumable)
 	{
@@ -136,14 +150,13 @@ public class GameManager : MonoBehaviour {
 		if (gameover)
 		{
 			//get random index for message list
-			var messageIndex = Random.Range(0,consumable.gameoverMessages.Length);
+			var messageIndex = UnityEngine.Random.Range(0,consumable.gameoverMessages.Length);
 			//display error message
 			UserInterface.instance.DisplayFailMessage(consumable.gameoverMessages[messageIndex]).OnComplete(() => 
 			{ 
 				GameOver(); 
 				return;
 			});
-			SetMultiplier();
 
 		}
 	}
@@ -159,5 +172,14 @@ public class GameManager : MonoBehaviour {
 		UserInterface.instance.ShowGameOverScreen ();
 		SequenceManager.instance.ClearSequences ();
 		Character.instance.ResetCombo();
+		SetGamePlayVariables(ColourType.Blank);
+	}
+	public void Reset()
+	{
+		strikes = 0;
+		foreach (BackgroundQuadrant bq in backgroundQuads)
+		{
+			bq.Dissappear();
+		}
 	}
 }

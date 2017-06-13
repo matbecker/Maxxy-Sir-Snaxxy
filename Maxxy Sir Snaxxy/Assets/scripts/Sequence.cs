@@ -12,16 +12,16 @@ public class Sequence : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		SpawnSequence ();
+		//SpawnSequence ();
 	}
 	public void SpawnSequence()
 	{
 		if (!isPlaying)
 			isPlaying = true;
 
-		var rand = Random.Range (SequenceManager.instance.sequenceMin, SequenceManager.instance.sequenceMax);
+		var consumableAmount = Random.Range (SequenceManager.instance.sequenceMin, SequenceManager.instance.sequenceMax);
 
-		for (int i = 0; i < rand; i++) 
+		for (int i = 0; i < consumableAmount; i++) 
 		{
 			//pick a random column
 			var col = Random.Range(0,Layout.instance.GetCurrentScreen().columns.Length);
@@ -31,8 +31,14 @@ public class Sequence : MonoBehaviour {
 			sequenceConsumables.Add (consumable);
 			consumable.mySequence = this;
 		}
+		if (sequenceNumber > 0)
+		{
+			var rand = Random.value;
+			if (rand > 0.5f)
+				GameManager.instance.SetBackgroundImages();
+		}
 		sequenceNumber++;
-
+		UserInterface.instance.waveInt++;
 		if (sequenceNumber % 5 == 0) 
 		{
 			//increase the difficulty every 5 waves
@@ -40,26 +46,16 @@ public class Sequence : MonoBehaviour {
 			return;
 		} 
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		if (!isPlaying) {
-			return;
-		}
-		else{
-			if (sequenceConsumables.Count == 0) 
-			{
-				SpawnSequence ();
-			}
-		}
-	}
-	public void SetConsumableValues()
+
+	public void SetConsumableValues(GameManager.Multiplier m)
 	{
 		foreach (Consumable c in sequenceConsumables) 
 		{
-			switch (GameManager.instance.currentMultiplier) 
+			switch (m) 
 			{
+			case GameManager.Multiplier.None:
+				c.value = c.originalValue;
+				break;
 			case GameManager.Multiplier.x2:
 				c.value =  (c.originalValue * 2);
 				break;
@@ -69,17 +65,17 @@ public class Sequence : MonoBehaviour {
 			case GameManager.Multiplier.x4:
 				c.value = (c.originalValue * 4);
 				break;
+			case GameManager.Multiplier.x5:
+				c.value = (c.originalValue * 5);
+				break;
 			case GameManager.Multiplier.x6:
 				c.value = (c.originalValue * 6);
 				break;
 			case GameManager.Multiplier.x8:
 				c.value = (c.originalValue * 8);
 				break;
-			case GameManager.Multiplier.x16:
-				c.value = (c.originalValue * 16);
-				break;
-			default:
-				c.value = c.originalValue;
+			case GameManager.Multiplier.x10:
+				c.value = (c.originalValue * 10);
 				break;
 			}
 		}

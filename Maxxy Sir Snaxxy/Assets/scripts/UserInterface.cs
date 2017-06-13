@@ -13,6 +13,7 @@ public class UserInterface : MonoBehaviour {
 	public TextMeshProUGUI combo;
 	public TextMeshProUGUI multiplier;
 	public TextMeshProUGUI failText;
+	public TextMeshProUGUI waveText;
 	public string[] inGameFailText;
 	public string[] inGameDropText;
 	public Image SizeOMeter;
@@ -20,11 +21,15 @@ public class UserInterface : MonoBehaviour {
 	public string[] fatText;
 	private Tween colorTween;
 	private Coroutine counter;
+	private Tween multiplierTween;
 
+	public int waveInt = 1;
 	void Awake()
 	{
 		if (!instance)
 			instance = this;
+
+		waveText.color = Color.clear;
 	}
 	// Use this for initialization
 	void Start () 
@@ -32,6 +37,11 @@ public class UserInterface : MonoBehaviour {
 		ResetUI();
 		BounceScore();
 		counter = null;
+		PlayRandomWaveAnim().OnComplete(() => {
+			PlayRandomWaveFinish().OnComplete(() => {
+				SequenceManager.instance.GetCurrentSequence().SpawnSequence();
+			});
+		});
 	}
 	
 	// Update is called once per frame
@@ -45,6 +55,57 @@ public class UserInterface : MonoBehaviour {
 		{
 			t.rectTransform.localScale = Vector3.one;		
 		});
+	}
+	public Tween PlayRandomWaveFinish()
+	{
+		Tween t = null;
+		int index = Random.Range(0,3);
+		switch(index)
+		{
+		case 0:
+			t = waveText.transform.DOScaleX(1.2f, 0.5f).SetEase(Ease.OutElastic, 1.0f, 0.5f).OnComplete(() => {
+				waveText.transform.DOScale(Vector3.zero,1.0f);
+			});
+			break;
+		case 1:
+			waveText.transform.DORotate(new Vector3(0.0f,0.0f,360.0f),1.0f, RotateMode.Fast);
+			t = waveText.transform.DOScale(Vector3.zero,0.0f).SetEase(Ease.InOutBack,1.0f,1.0f);
+			break;
+		case 2:
+			waveText.transform.DORotate(new Vector3(0.0f,180.0f,0.0f), 1.0f, RotateMode.Fast);
+			t = waveText.DOColor(Color.clear,1.0f);
+			break;
+		}
+		Debug.Log(index);
+		return t;
+	}
+	public Tween PlayRandomWaveAnim()
+	{
+		waveText.text = "Wave" + waveInt;
+		Tween t = null;
+		int index = Random.Range(0, 3);
+
+		switch (index)
+		{
+		case 0:
+			waveText.transform.localScale = Vector3.zero;
+			waveText.color = Color.white;
+			t = waveText.transform.DOScale(Vector3.one, 1.0f).SetEase(Ease.OutBack,1.0f,1.0f);
+			break;
+		case 1:
+			waveText.transform.localScale = Vector3.one;
+			waveText.color = Color.clear;
+			t = waveText.DOColor(Color.white, 1.0f);
+			break;
+		case 2:
+			waveText.transform.localScale = new Vector3(1.0f,0.0f,1.0f);
+			waveText.color = Color.white;
+			t = waveText.transform.DOScaleY(1.0f, 0.5f).SetEase(Ease.OutBounce,0.5f,0.5f);
+			break;
+		}
+		Debug.Log(index);
+		return t;
+
 	}
 	public void AdjustSizeOMeter()
 	{
@@ -83,7 +144,7 @@ public class UserInterface : MonoBehaviour {
 				SizeOMeter.transform.DOScaleY (-1.0f, 1.0f); //full negative size
 			else {
 				var d = c.midSize - c.currentSize;
-				SizeOMeter.transform.DOScaleY (d * -1, 1.0f);
+				SizeOMeter.transform.DOScaleY (d * -1, 1.0f); //negate the result 
 			}
 		} else {
 			SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);
@@ -92,6 +153,33 @@ public class UserInterface : MonoBehaviour {
 		{
 			//flash the bar if im close to losing because of my weight
 			 colorTween = SizeOMeter.DOColor(Color.red, 0.2f).SetLoops(-1, LoopType.Yoyo); 
+		}
+	}
+	public void UpdateMultiplier(GameManager.Multiplier m, float mSize)
+	{
+		if (m == GameManager.Multiplier.None)
+		{
+			multiplier.text = "";
+		}
+		else
+		{
+			//set the multiplier text
+			multiplier.SetText(m.ToString());
+		}
+
+		//set the new size
+		if (multiplierTween != null)
+		{
+			multiplierTween.Kill(false);
+			multiplierTween = null;
+		}
+		if (multiplierTween == null)
+		{
+			multiplierTween = multiplier.rectTransform.DOScale (Vector3.one * mSize, 1.0f);
+			multiplierTween.OnComplete(() => {
+				multiplierTween.Kill(true);
+				multiplierTween = null;
+			});
 		}
 	}
 	public IEnumerator ScoreCounter()
