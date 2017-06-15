@@ -6,15 +6,7 @@ public class Node : MonoBehaviour {
 
 	public int index;
 	public BackgroundQuadrant bq;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 	void OnTriggerEnter(Collider other)
 	{
 		var max = other.GetComponentInChildren<Character>();

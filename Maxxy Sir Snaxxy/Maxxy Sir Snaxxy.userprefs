@@ -1,18 +1,22 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/GameManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/MainMenu.cs">
     <Files>
-      <File FileName="Assets/scripts/Consumable.cs" Line="31" Column="3" />
-      <File FileName="Assets/scripts/Character.cs" Line="181" Column="22" />
-      <File FileName="Assets/scripts/UserInterface.cs" Line="30" Column="2" />
-      <File FileName="Assets/scripts/GameManager.cs" Line="30" Column="47" />
-      <File FileName="Assets/scripts/Layout.cs" Line="90" Column="4" />
-      <File FileName="Assets/scripts/MobileController.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/Node.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/SequenceManager.cs" Line="41" Column="30" />
-      <File FileName="Assets/scripts/Sequence.cs" Line="87" Column="27" />
-      <File FileName="Assets/scripts/Boundary.cs" Line="44" Column="45" />
-      <File FileName="Assets/scripts/GameoverScreen.cs" Line="46" Column="1" />
+      <File FileName="Assets/scripts/Consumable.cs" Line="34" Column="3" />
+      <File FileName="Assets/scripts/Character.cs" Line="83" Column="4" />
+      <File FileName="Assets/scripts/UserInterface.cs" Line="47" Column="1" />
+      <File FileName="Assets/scripts/GameManager.cs" Line="56" Column="13" />
+      <File FileName="Assets/scripts/Layout.cs" Line="194" Column="3" />
+      <File FileName="Assets/scripts/MobileController.cs" Line="25" Column="100" />
+      <File FileName="Assets/scripts/Node.cs" Line="9" Column="1" />
+      <File FileName="Assets/scripts/SequenceManager.cs" Line="79" Column="3" />
+      <File FileName="Assets/scripts/Sequence.cs" Line="53" Column="12" />
+      <File FileName="Assets/scripts/Boundary.cs" Line="7" Column="2" />
+      <File FileName="Assets/scripts/GameoverScreen.cs" Line="59" Column="1" />
+      <File FileName="Assets/scripts/BackgroundQuadrant.cs" Line="43" Column="3" />
+      <File FileName="Assets/scripts/MainMenu.cs" Line="22" Column="6" />
+      <File FileName="Assets/scripts/CameraBehaviour.cs" Line="8" Column="1" />
+      <File FileName="Assets/scripts/HelperFunctions.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

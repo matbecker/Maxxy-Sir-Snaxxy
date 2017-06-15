@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour {
 			return strikes >= maxStrikes;
 		}
 	}
+	public bool inGame = false;
 	public Dictionary<string, int> highscoreDict;
 
 	void Awake()
@@ -39,6 +40,10 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		
+	}
+	public void Init()
+	{
 		var colourIndex = UnityEngine.Random.Range (0, backgroundColours.Length);
 		Camera.main.DOColor (backgroundColours [colourIndex], 0.0f);
 		currentColour = HelperFunctions.SetColourType (colourIndex);
@@ -48,7 +53,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (!gameover)
+		if (inGame)
 		{
 			int rand = UnityEngine.Random.Range (0, 1000);
 
@@ -100,23 +105,23 @@ public class GameManager : MonoBehaviour {
 			{
 			case Multiplier.None:
 				m = Multiplier.x2;
-				Debug.Log("x2");
+//				Debug.Log("x2");
 				break;
 			case Multiplier.x2:
 				m = Multiplier.x4;
-				Debug.Log("x4");
+//				Debug.Log("x4");
 				break;
 			case Multiplier.x3:
 				m = Multiplier.x6;
-				Debug.Log("x6");
+//				Debug.Log("x6");
 				break;
 			case Multiplier.x4:
 				m = Multiplier.x8;
-				Debug.Log("x8");
+//				Debug.Log("x8");
 				break;
 			case Multiplier.x5:
 				m = Multiplier.x10;
-				Debug.Log("x10");
+//				Debug.Log("x10");
 				break;
 			}
 		}
@@ -143,7 +148,7 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
-	public void Strike(Consumable consumable)
+	public void Strike(Consumable consumable) 
 	{
 		strikes++;
 		Character.instance.ResetCombo();
@@ -169,7 +174,7 @@ public class GameManager : MonoBehaviour {
 	}
 	public void GameOver()
 	{
-		UserInterface.instance.ShowGameOverScreen ();
+		GameoverScreen.instance.ShowMenu();
 		SequenceManager.instance.ClearSequences ();
 		Character.instance.ResetCombo();
 		SetGamePlayVariables(ColourType.Blank);
@@ -181,5 +186,17 @@ public class GameManager : MonoBehaviour {
 		{
 			bq.Dissappear();
 		}
+	}
+	public void CheckForNewWave(Consumable c)
+	{
+		if (!gameover)
+		{
+			if (c.lastItem && !UserInterface.instance.intermission)
+			{
+				UserInterface.instance.PlayWaveIntermission();
+				Debug.Log("new wave started by " + c.name);
+
+			}
+		}	
 	}
 }

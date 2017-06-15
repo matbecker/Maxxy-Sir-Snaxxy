@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -17,6 +18,7 @@ public class Consumable : MonoBehaviour {
 	public float weight;
 	public float fatness;
 	public bool collected;
+	public bool lastItem;
 	public string[] gameoverMessages;
 
 	// Use this for initialization
@@ -24,6 +26,9 @@ public class Consumable : MonoBehaviour {
 	{
 		originalValue = value;
 		sr.gameObject.transform.DOScale (Vector3.one * 1.2f, pulseDuration).SetLoops (-1, LoopType.Yoyo);
+
+		if (GameManager.instance.gameover)
+			VoidItem();
 	}
 	void Update()
 	{
@@ -32,11 +37,15 @@ public class Consumable : MonoBehaviour {
 		vel += SequenceManager.instance.sequenceSpeed;
 		rb.velocity = vel;
 	}
-
+	public void VoidItem()
+	{
+		rb.constraints = RigidbodyConstraints.FreezeAll;
+		NotCollected();
+	}
 	public void Collected()
 	{
 		collected = true;
-		bc.enabled = false;
+		GameManager.instance.CheckForNewWave(this);
 
 		transform.DOScale (Vector3.zero, 0.5f).OnComplete(() => 
 		{
@@ -45,10 +54,13 @@ public class Consumable : MonoBehaviour {
 
 			Destroy (gameObject);
 		});
+		Debug.Log("you got the " + type);
 	}
 	public void NotCollected()
 	{
-		bc.enabled = false;
+		GameManager.instance.CheckForNewWave(this);
+		if (bc != null)
+			bc.enabled = false;
 
 		transform.DOScale (Vector3.zero, 1.0f).OnComplete(() => 
 		{

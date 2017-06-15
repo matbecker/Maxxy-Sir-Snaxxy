@@ -22,6 +22,7 @@ public class UserInterface : MonoBehaviour {
 	private Tween colorTween;
 	private Coroutine counter;
 	private Tween multiplierTween;
+	public bool intermission;
 
 	public int waveInt = 1;
 	void Awake()
@@ -34,21 +35,16 @@ public class UserInterface : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		
+	}
+	public void Init()
+	{
 		ResetUI();
 		BounceScore();
 		counter = null;
-		PlayRandomWaveAnim().OnComplete(() => {
-			PlayRandomWaveFinish().OnComplete(() => {
-				SequenceManager.instance.GetCurrentSequence().SpawnSequence();
-			});
-		});
+		PlayWaveIntermission();
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
+
 	public void BumpText(TextMeshProUGUI t)
 	{
 		t.rectTransform.DOScale (new Vector3 (t.rectTransform.localScale.x * 1.1f, t.rectTransform.localScale.x * 1.1f, t.rectTransform.localScale.z), 0.2f).SetLoops(2, LoopType.Yoyo).OnComplete(() =>
@@ -59,53 +55,87 @@ public class UserInterface : MonoBehaviour {
 	public Tween PlayRandomWaveFinish()
 	{
 		Tween t = null;
-		int index = Random.Range(0,3);
+		int index = Random.Range(0,5);
 		switch(index)
 		{
 		case 0:
-			t = waveText.transform.DOScaleX(1.2f, 0.5f).SetEase(Ease.OutElastic, 1.0f, 0.5f).OnComplete(() => {
-				waveText.transform.DOScale(Vector3.zero,1.0f);
-			});
+			waveText.transform.DOScaleX(1.2f, 0.5f).SetEase(Ease.OutElastic, 1.0f, 0.5f);
+			t =	waveText.transform.DOScale(Vector3.zero,1.0f);
 			break;
 		case 1:
-			waveText.transform.DORotate(new Vector3(0.0f,0.0f,360.0f),1.0f, RotateMode.Fast);
-			t = waveText.transform.DOScale(Vector3.zero,0.0f).SetEase(Ease.InOutBack,1.0f,1.0f);
+			waveText.transform.DORotate(new Vector3(-360.0f,0.0f,0.0f),1.0f, RotateMode.FastBeyond360);
+			t = waveText.transform.DOScaleY(0.0f,1.0f).SetEase(Ease.InBack,1.0f,1.0f).SetDelay(1.0f);
 			break;
 		case 2:
 			waveText.transform.DORotate(new Vector3(0.0f,180.0f,0.0f), 1.0f, RotateMode.Fast);
 			t = waveText.DOColor(Color.clear,1.0f);
 			break;
+		case 3:
+			waveText.transform.DOScaleY(1.4f, 0.3f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutElastic,1.0f,1.0f);
+			t = waveText.rectTransform.DOAnchorPosX(300.0f,1.0f).SetEase(Ease.InOutElastic,1.0f,1.0f).SetDelay(0.25f);
+			break;
+		case 4:
+			waveText.transform.DOScaleX(1.4f, 0.3f).SetEase(Ease.OutBounce,1.0f,1.0f);
+			waveText.transform.DOScale(Vector3.zero,1.0f).SetDelay(0.3f);
+			t = waveText.rectTransform.DOAnchorPosY(400.0f,1.0f).SetEase(Ease.OutElastic,1.0f,1.0f).SetDelay(0.3f);
+			break;
 		}
-		Debug.Log(index);
 		return t;
 	}
-	public Tween PlayRandomWaveAnim()
+	public Tween PlayRandomWaveIntro()
 	{
 		waveText.text = "Wave" + waveInt;
+		waveText.transform.localRotation = Quaternion.identity;
 		Tween t = null;
-		int index = Random.Range(0, 3);
+		int index = Random.Range(0,5);
 
 		switch (index)
 		{
 		case 0:
 			waveText.transform.localScale = Vector3.zero;
 			waveText.color = Color.white;
+			waveText.rectTransform.anchoredPosition = Vector2.zero;
 			t = waveText.transform.DOScale(Vector3.one, 1.0f).SetEase(Ease.OutBack,1.0f,1.0f);
 			break;
 		case 1:
 			waveText.transform.localScale = Vector3.one;
 			waveText.color = Color.clear;
-			t = waveText.DOColor(Color.white, 1.0f);
+			waveText.rectTransform.anchoredPosition = Vector2.zero;
+			waveText.DOColor(Color.white, 1.0f);
+			t = waveText.transform.DOScale(Vector3.one * 1.1f,0.3f).SetLoops(2,LoopType.Yoyo).SetDelay(1.0f).SetEase(Ease.OutCirc,1.0f,0.3f);
 			break;
 		case 2:
 			waveText.transform.localScale = new Vector3(1.0f,0.0f,1.0f);
 			waveText.color = Color.white;
-			t = waveText.transform.DOScaleY(1.0f, 0.5f).SetEase(Ease.OutBounce,0.5f,0.5f);
+			waveText.rectTransform.anchoredPosition = Vector2.zero;
+			t = waveText.transform.DOScaleY(1.0f, 1.0f).SetEase(Ease.OutBounce,0.5f,1.0f);
+			break;
+		case 3:
+			waveText.transform.localScale = Vector3.one;
+			waveText.color = Color.white;
+			waveText.rectTransform.anchoredPosition = new Vector2(-300.0f,0.0f);
+			t = waveText.rectTransform.DOAnchorPosX(0.0f, 1.0f,false).SetEase(Ease.OutElastic,1.0f,1.0f);
+			break;
+		case 4:
+			waveText.transform.localScale = Vector3.zero;
+			waveText.color = Color.white;
+			waveText.rectTransform.anchoredPosition = new Vector2(0.0f,-400.0f);
+			waveText.transform.DOScale(Vector3.one,0.75f);
+			t = waveText.rectTransform.DOAnchorPosY(0.0f, 1.0f,false).SetEase(Ease.InOutBack,1.0f,1.0f);
 			break;
 		}
-		Debug.Log(index);
 		return t;
 
+	}
+	public void PlayWaveIntermission()
+	{
+		intermission = true;
+		PlayRandomWaveIntro().OnComplete(() => {
+			PlayRandomWaveFinish().OnComplete(() => {
+				SequenceManager.instance.GetCurrentSequence().SpawnSequence();
+				intermission = false;
+			});
+		});
 	}
 	public void AdjustSizeOMeter()
 	{
@@ -207,13 +237,13 @@ public class UserInterface : MonoBehaviour {
 		}
 		BumpText (combo);
 	}
-	public void ShowGameOverScreen()
+	public void DisplayLastWave()
 	{
-		GameoverScreen.instance.ShowMenu ();
-	}
-	public void HideGameOverScreen()
-	{
-		GameoverScreen.instance.HideMenu ();
+		waveText.rectTransform.anchoredPosition = new Vector2(0.0f,-240.0f);
+		waveText.transform.localRotation = Quaternion.identity;
+		waveText.transform.localScale = Vector3.one;
+		waveText.color = Color.clear;
+		waveText.DOColor(Color.white, 2.0f);
 	}
 	public void ResetUI()
 	{
@@ -223,6 +253,8 @@ public class UserInterface : MonoBehaviour {
 		multiplier.text = "";
 		SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);
 		failText.DOColor(Color.clear,0.0f);
+		waveInt = 1;
+		waveText.text = "wave" + waveInt;
 		colorTween.Kill(true);
 		colorTween = SizeOMeter.DOColor(Color.black, 0.2f); 
 		colorTween = null;

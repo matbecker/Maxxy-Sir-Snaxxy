@@ -1,16 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SequenceManager : MonoBehaviour {
 
+	[System.Serializable]
+	public class Wave 
+	{
+		public ConsumableWeights[] consumables;
+		public int weight;
+		private int totalWeight;
+
+		public void CalcTotalWeight() 
+		{
+			totalWeight = consumables.Sum(cw => cw.weight);
+		}
+
+		public Consumable GetRandomConsumable()
+		{
+			var rand = Random.Range (0, totalWeight);
+
+			var weight = 0;
+			for(int i = 0; i < consumables.Length; i++) 
+			{
+				var cw = consumables[i];
+				weight += cw.weight;
+				if(weight > rand) 
+				{
+					return cw.prefab;
+				}
+			}
+
+			return null;
+		}
+	}
+
+	[System.Serializable]
+	public class ConsumableWeights 
+	{
+		public Consumable prefab;
+		public int weight;
+	}
+
 	public static SequenceManager instance;
-	public Consumable[] consumables;
+	public Wave[] waves;
 	public List<Sequence> queuedSequences;
 	public int sequenceMin;
 	public int sequenceMax;
 	public Sequence sequenceObj;
 	public Vector3 sequenceSpeed;
+
+	private Wave currentWave;
+	private int totalWaveWeight;
 
 	// Use this for initialization
 
@@ -21,21 +63,42 @@ public class SequenceManager : MonoBehaviour {
 	}
 	void Start () 
 	{
-		var s = InstantiateSequence();
-		queuedSequences.Add (s);
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
 		
 	}
+	public void Init()
+	{
+		var s = InstantiateSequence();
+		queuedSequences.Add (s);
+		totalWaveWeight = waves.Sum(w => w.weight);
+		foreach(var wave in waves)
+		{
+			wave.CalcTotalWeight();
+		}
+
+		SetRandomWave();
+	}
+
+	public void SetRandomWave()
+	{
+		var rand = Random.Range (0, totalWaveWeight);
+
+		var weight = 0;
+		for(int i = 0; i < waves.Length; i++) {
+			var cw = waves[i];
+			weight += cw.weight;
+			if(weight > rand) {
+				currentWave = cw;
+				return;
+			}
+		}
+
+	}
+
 	public Consumable GetRandomConsumable()
 	{
-		var rand = Random.Range (0, consumables.Length);
-
-		return consumables [rand];
+		return currentWave.GetRandomConsumable();
 	}
+		
 	public void IncreaseDifficulty()
 	{
 		AdjustSequenceSpeed(0.25f);
@@ -82,6 +145,10 @@ public class SequenceManager : MonoBehaviour {
 	public Sequence GetCurrentSequence()
 	{
 		return queuedSequences [0];
+	}
+	public bool SequenceOver()
+	{
+		return queuedSequences[0].sequenceConsumables.Count < 1;
 	}
 	public void ClearSequences()
 	{

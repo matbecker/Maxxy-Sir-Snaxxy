@@ -53,6 +53,10 @@ public class Character : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		
+	}
+	public void Init()
+	{
 		currentSize = midSize;
 		transform.localScale = Vector3.one * currentSize;
 		colourIndex = 0;
@@ -68,12 +72,15 @@ public class Character : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		pos = Camera.main.WorldToViewportPoint(transform.position);
+		if (GameManager.instance.inGame)
+		{
+			pos = Camera.main.WorldToViewportPoint(transform.position);
 
-		var vel = rb.velocity;
-		vel.Normalize();
-		vel += fallingSpeed;
-		rb.velocity = vel;
+			var vel = rb.velocity;
+			vel.Normalize();
+			vel += fallingSpeed;
+			rb.velocity = vel;
+		}
 	}
 	public void SetFallingSpeed(float x, float y)
 	{
@@ -145,16 +152,6 @@ public class Character : MonoBehaviour {
 				increaseMultiplier = false;
 			}
 			consumable.Collected();
-			var s = SequenceManager.instance.GetCurrentSequence();
-
-			if (s.sequenceConsumables.Count < 1)
-			{
-				UserInterface.instance.PlayRandomWaveAnim().OnComplete(() => {
-					UserInterface.instance.PlayRandomWaveFinish().OnComplete(() => {
-						s.SpawnSequence();
-					});
-				});
-			}
 		}
 
 	}
@@ -278,7 +275,8 @@ public class Character : MonoBehaviour {
 				}
 				else 
 				{
-					DisplayInGameFailText(UserInterface.instance.inGameFailText, UserInterface.instance.inGameFailText.Length);
+					if (!UserInterface.instance.intermission)
+						DisplayInGameFailText(UserInterface.instance.inGameFailText, UserInterface.instance.inGameFailText.Length);
 				}
 			}
 		}
@@ -286,13 +284,16 @@ public class Character : MonoBehaviour {
 	}
 	public void DisplayInGameFailText(string[] textList, int range)
 	{
-		var rand = Random.Range(0,range);
-		consumableValueText.text = textList[rand];
-
-		consumableValueText.DOColor(Color.white,0.1f).SetDelay(0.1f).OnComplete(() => 
+		if (!UserInterface.instance.intermission)
 		{
-			consumableValueText.DOColor(Color.clear,0.1f).SetDelay(0.1f);
-		});
+			var rand = Random.Range(0,range);
+			consumableValueText.text = textList[rand];
+
+			consumableValueText.DOColor(Color.white,0.1f).SetDelay(0.1f).OnComplete(() => 
+			{
+				consumableValueText.DOColor(Color.clear,0.1f).SetDelay(0.1f);
+			});
+		}
 	}
 	public Consumable GetLastConsumable()
 	{

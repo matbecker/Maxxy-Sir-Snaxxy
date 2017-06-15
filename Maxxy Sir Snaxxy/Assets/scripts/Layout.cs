@@ -32,59 +32,63 @@ public class Layout : MonoBehaviour {
 	}
 	void Update()
 	{
-		if (Input.deviceOrientation == DeviceOrientation.Portrait)
+		if (GameManager.instance.inGame)
 		{
-			if (currentLayout == ScreenState.Bottom)
+			if (Input.deviceOrientation == DeviceOrientation.Portrait)
 			{
-				return;
+				if (currentLayout == ScreenState.Bottom)
+				{
+					return;
+				}
+				else
+				{
+					currentLayout = ScreenState.Bottom;
+					SetLayout();
+					return;
+				}
 			}
-			else
+			else if (Input.deviceOrientation == DeviceOrientation.LandscapeRight)
 			{
-				currentLayout = ScreenState.Bottom;
-				SetLayout();
-				return;
+				if (currentLayout == ScreenState.Right)
+				{
+					return;
+				}
+				else
+				{
+					currentLayout = ScreenState.Right;
+					SetLayout();
+					return;
+				}
 			}
-		}
-		else if (Input.deviceOrientation == DeviceOrientation.LandscapeRight)
-		{
-			if (currentLayout == ScreenState.Right)
+			else if (Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
 			{
-				return;
+				if (currentLayout == ScreenState.Top)
+				{
+					return;
+				}
+				else
+				{
+					currentLayout = ScreenState.Top;
+					SetLayout();
+					return;
+				}
 			}
-			else
+			else if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft)
 			{
-				currentLayout = ScreenState.Right;
-				SetLayout();
-				return;
-			}
-		}
-		else if (Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
-		{
-			if (currentLayout == ScreenState.Top)
-			{
-				return;
-			}
-			else
-			{
-				currentLayout = ScreenState.Top;
-				SetLayout();
-				return;
-			}
-		}
-		else if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft)
-		{
-			if (currentLayout == ScreenState.Left)
-			{
-				return;
-			}
-			else
-			{
-				currentLayout = ScreenState.Left;
-				SetLayout();
-				return;
+				if (currentLayout == ScreenState.Left)
+				{
+					return;
+				}
+				else
+				{
+					currentLayout = ScreenState.Left;
+					SetLayout();
+					return;
+				}
 			}
 		}
 	}
+
 	public Node GetNextNode()
 	{
 		//increase the node index
@@ -96,6 +100,7 @@ public class Layout : MonoBehaviour {
 		//return the new node
 		return GetCurrentScreen ().nodes [newIndex];
 	}
+
 	public Node GetPrevNode()
 	{
 		var newIndex = Character.instance.currentNode.index - 1;
@@ -110,12 +115,14 @@ public class Layout : MonoBehaviour {
 	{
 		return layouts [screenIndex];
 	}
+
 	public Rect GetBounds()
 	{
 		Rect r = new Rect(bounds[3].transform.position.x, bounds[0].transform.position.y, bounds[1].transform.position.x, bounds[2].transform.position.y);
 		return r;
 			
 	}
+
 	public void AdjustBounds()
 	{
 		foreach (Transform b in bounds)
@@ -138,43 +145,54 @@ public class Layout : MonoBehaviour {
 			break;
 		}
 	}
+
 	public void SetLayout()
 	{
 		AdjustBounds();
+		var c = Character.instance;
+		c.transform.DOScale(Vector3.zero,0.5f).OnComplete(() => {
+			switch (currentLayout)
+			{
+			case ScreenState.Bottom:
+				screenIndex = 0;
+				c.SetFallingSpeed(0.0f,-1.0f);
+				c.transform.DORotate(Vector3.zero, 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				break;
+			case ScreenState.Right:
+				screenIndex = 1;
+				c.SetFallingSpeed(1.0f,0.0f);
+				c.transform.DORotate(new Vector3(0.0f,0.0f,90.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				break;
+			case ScreenState.Top:
+				screenIndex = 2;
+				c.SetFallingSpeed(0.0f,1.0f);
+				c.transform.DORotate(new Vector3(0.0f,0.0f,180.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				break;
+			case ScreenState.Left:
+				screenIndex = 3;
+				c.SetFallingSpeed(-1.0f,0.0f);
+				c.transform.DORotate(new Vector3(0.0f,0.0f,270.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				break;
+			}
+			foreach (Node n in GetCurrentScreen().nodes)
+			{
+				n.gameObject.SetActive(true);
+			}
+			SequenceManager.instance.AdjustSequenceSpeed(0.0f);
+			c.transform.DOMove(GetCurrentScreen().startPoint.position, 0.0f).OnComplete(() => {
+				c.transform.DOScale(Vector3.one * c.currentSize, 0.5f);
+			});
+		});
 
-		switch (currentLayout)
-		{
-		case ScreenState.Bottom:
-			screenIndex = 0;
-			Character.instance.SetFallingSpeed(0.0f,-1.0f);
-			Character.instance.transform.DORotate(Vector3.zero, 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-			break;
-		case ScreenState.Right:
-			screenIndex = 1;
-			Character.instance.SetFallingSpeed(1.0f,0.0f);
-			Character.instance.transform.DORotate(new Vector3(0.0f,0.0f,90.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-			break;
-		case ScreenState.Top:
-			screenIndex = 2;
-			Character.instance.SetFallingSpeed(0.0f,1.0f);
-			Character.instance.transform.DORotate(new Vector3(0.0f,0.0f,180.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-			break;
-		case ScreenState.Left:
-			screenIndex = 3;
-			Character.instance.SetFallingSpeed(-1.0f,0.0f);
-			Character.instance.transform.DORotate(new Vector3(0.0f,0.0f,270.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-			break;
-		}
-		foreach (Node n in GetCurrentScreen().nodes)
-		{
-			n.gameObject.SetActive(true);
-		}
-		SequenceManager.instance.AdjustSequenceSpeed(0.0f);
-		Character.instance.transform.DOMove(GetCurrentScreen().startPoint.position, 0.5f);
 
 	}
+
 	// Use this for initialization
 	void Start () 
+	{
+		
+	}
+	public void Init()
 	{
 		foreach (Screen s in layouts)
 		{

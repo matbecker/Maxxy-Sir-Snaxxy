@@ -106,8 +106,8 @@ MonoBehaviour:
     y: 30
     width: 1280
     height: 700
-  m_MinSize: {x: 681, y: 342}
-  m_MaxSize: {x: 12006, y: 8042}
+  m_MinSize: {x: 683, y: 342}
+  m_MaxSize: {x: 12008, y: 8042}
   vertical: 0
   controlID: 21
 --- !u!114 &6
@@ -253,8 +253,8 @@ MonoBehaviour:
     y: 0
     width: 384
     height: 700
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 277, y: 71}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -287,14 +287,14 @@ MonoBehaviour:
     width: 447
     height: 408
   m_SceneLighting: 1
-  lastFramingTime: 50805.76147001982
+  lastFramingTime: 15099.916323959827
   m_2DMode: 1
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 122, y: 195.5, z: 0}
+    m_Target: {x: 178.98526, y: 249.36581, z: 0}
     speed: 2
-    m_Value: {x: 122, y: 195.5, z: 0}
+    m_Value: {x: 178.98526, y: 249.36581, z: 0}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -321,14 +321,14 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 201.69855
+    m_Target: 207.2439
     speed: 2
-    m_Value: 201.69855
+    m_Value: 207.2439
   m_Ortho:
     m_Target: 1
     speed: 2
     m_Value: 1
-  m_LastSceneViewRotation: {x: 0.07074967, y: 0.005389784, z: -0.00038221473, w: 0.9974795}
+  m_LastSceneViewRotation: {x: -0.08294091, y: 0.80014896, z: -0.11382749, w: -0.5830318}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
@@ -437,10 +437,10 @@ MonoBehaviour:
     width: 443
     height: 408
   m_TreeViewState:
-    scrollPos: {x: 0, y: 57}
-    m_SelectedIDs: 607e0100
-    m_LastClickedID: 97888
-    m_ExpandedIDs: 5855f6ffc055f6ff4057f6ffbe81f6ff2682f6ffa683f6ff7486f6ffde86f6ff5e88f6ff428ff6ffa88ff6ff2891f6ff02fdf6ff68fdf6ffe8fef6ff2a30f7ff9430f7ff1432f7fff63ef7ff5c3ff7ffdc40f7ff4256f7ffaa56f7ff2a58f7ff125af7ff7c5af7fffc5bf7ffd65df7ff3c5ef7ffbc5ff7ff346cf7ffc66cf7ff466ef7ff6076f7fff276f7ff7078f7ff32c8f8ff9ac8f8ff1acaf8ff58e4f8ffc2e4f8ff44e6f8ffcc44fbff3645fbffb646fbff227cfbff8c7cfbff0c7efbff30e4feff7efbffff80fbffffccfbffff00000000682b0000762b0000c42b0000ce2b0000648a0000c88a0000f28a000046940000aa940000d49400009ad50000c8d500007cd60000d0dc0000fadc000022f70000c6f7000094f8000072fe000016ff0000de2a01000e2b0100a6340100d6340100e66f0100667601009a76010006770100367701003a770100147801001a7e01008e7e0100be7e0100c27e01009c7f0100
+    scrollPos: {x: 0, y: 25}
+    m_SelectedIDs: 3433fdff
+    m_LastClickedID: -183500
+    m_ExpandedIDs: 5e79fcff3433fdffa861fdff3c62fdffbe63fdff5e69fdfff269fdff746bfdff8e6efdff226ffdffae70fdffa284feff2485feffa686feff5489feffd689feff588bfeff62c0ffff64c0ffffb8c0ffffd2edfffff4edffffcafaffffcefaffffc8fbffffcafbffffccfbffff000000008c2b0000a27500004ccb000078cb0000c0cb0000facb000048cc000052cc000080cc00003ecd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -509,10 +509,10 @@ MonoBehaviour:
   m_LastProjectPath: /Users/Matbecker/Desktop/Maxxy-Sir-Snaxxy/Maxxy Sir Snaxxy
   m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 11}
-    m_SelectedIDs: 1a260000
-    m_LastClickedID: 9754
-    m_ExpandedIDs: 000000001a26000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 23}
+    m_SelectedIDs: 1c260000
+    m_LastClickedID: 9756
+    m_ExpandedIDs: 000000001c260000c228000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -540,7 +540,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000001a260000
+    m_ExpandedIDs: 000000001c260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -565,10 +565,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: 2ee3fcff
+    m_LastClickedInstanceID: -203986
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: 082a00005c2900003a2a00002029000096290000c6290000f0290000802900007c290000b62900003e2a0000f2280000
+    m_ExpandedInstanceIDs: 082a00005c2900003a2a00002029000096290000c6290000f0290000802900007c290000b62900003e2a0000f22800000c290000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -647,7 +647,7 @@ MonoBehaviour:
     y: 94
     width: 382
     height: 679
-  m_ScrollPosition: {x: 0, y: 0}
+  m_ScrollPosition: {x: 0, y: 108.956116}
   m_InspectorMode: 0
   m_PreviewResizer:
     m_CachedPref: 160

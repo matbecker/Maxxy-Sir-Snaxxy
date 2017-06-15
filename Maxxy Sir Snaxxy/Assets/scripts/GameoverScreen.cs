@@ -46,20 +46,17 @@ public class GameoverScreen : MonoBehaviour {
 			b.gameObject.SetActive (true);
 		}
 		buttonPanel.gameObject.SetActive (true);
-
-		overlay.DOColor (backgroundColour, 0.5f).OnComplete(() => {
+		overlay.DOColor (Color.black, 1.0f).OnComplete(() => {
 			buttonPanel.transform.DOScaleX(1.0f,0.5f).OnComplete(() => {
 				foreach (Button b in buttons)
 				{
 					b.transform.DOScaleY(1.0f,1.0f).SetEase(Ease.OutBounce,1.0f,1.0f);
 				}
+				UserInterface.instance.DisplayLastWave();
 			});
 		});
 	}
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 	public void Retry()
 	{
 		HideMenu ();
@@ -67,5 +64,6 @@ public class GameoverScreen : MonoBehaviour {
 		GameManager.instance.Reset();
 		UserInterface.instance.ResetUI();
 		SequenceManager.instance.Reset();
+		UserInterface.instance.PlayWaveIntermission();
 	}
 }

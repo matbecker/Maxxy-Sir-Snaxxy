@@ -15,6 +15,9 @@ public class BackgroundQuadrant : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+	}
+	public void Init()
+	{
 		Dissappear();
 	}
 	public void Appear()
@@ -37,11 +40,5 @@ public class BackgroundQuadrant : MonoBehaviour {
 			backgroundImage.transform.localScale = new Vector3(0.0f,1.0f,1.0f);
 			isVisible = false;
 		});
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
 	}
 }
