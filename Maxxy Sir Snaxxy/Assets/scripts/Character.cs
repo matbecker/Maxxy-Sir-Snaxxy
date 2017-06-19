@@ -11,7 +11,7 @@ public class Character : MonoBehaviour {
 	public GameManager.ColourType colour = GameManager.ColourType.Purple;
 
 	//components
-	[SerializeField] Rigidbody rb;
+	public Rigidbody rb;
 	[SerializeField] SphereCollider col;
 	[SerializeField] Material mat;
 	[SerializeField] Color[] colours;
@@ -53,20 +53,17 @@ public class Character : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		
+		currentSize = midSize;
 	}
 	public void Init()
 	{
 		currentSize = midSize;
-		transform.localScale = Vector3.one * currentSize;
 		colourIndex = 0;
-		SetFallingSpeed(0.0f,-1.0f);
 	}
 	public void StopMoving()
 	{
 		rb.velocity = Vector3.zero;
 		transform.position = new Vector3(currentNode.transform.position.x, transform.position.y, transform.position.z);
-
 	}
 	
 	// Update is called once per frame
@@ -78,6 +75,7 @@ public class Character : MonoBehaviour {
 
 			var vel = rb.velocity;
 			vel.Normalize();
+			vel *= Time.deltaTime;
 			vel += fallingSpeed;
 			rb.velocity = vel;
 		}
@@ -174,6 +172,7 @@ public class Character : MonoBehaviour {
 	}
 	public void Resize()
 	{
+		rb.constraints = RigidbodyConstraints.None;
 		if (currentSize > maxSize) 
 		{
 			transform.DOScale(Vector3.one * 4.0f, 1.0f).SetEase(Ease.OutElastic, 1.0f,1.0f).OnComplete(() => 
@@ -194,7 +193,12 @@ public class Character : MonoBehaviour {
 		}
 		else 
 		{
-			transform.DOScale (Vector3.one * currentSize, 1.0f).SetEase (Ease.OutBounce,1.0f,1.0f);
+			transform.DOScale (Vector3.one * currentSize, 1.0f).SetEase (Ease.OutBounce,1.0f,1.0f).OnComplete(() => {
+				if (HelperFunctions.IsEven(Layout.instance.screenIndex))
+					rb.constraints = RigidbodyConstraints.FreezePositionY;
+				else
+					rb.constraints = RigidbodyConstraints.FreezePositionX;
+			});
 		}
 		AdjustStats ();
 	}

@@ -45,9 +45,11 @@ public class GameManager : MonoBehaviour {
 	public void Init()
 	{
 		var colourIndex = UnityEngine.Random.Range (0, backgroundColours.Length);
-		Camera.main.DOColor (backgroundColours [colourIndex], 0.0f);
 		currentColour = HelperFunctions.SetColourType (colourIndex);
-		SetGamePlayVariables(currentColour);
+		Camera.main.DOColor (backgroundColours [colourIndex], 1.0f);
+		inGame = true;
+		strikes = 0;
+		MainMenu.instance.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -174,10 +176,18 @@ public class GameManager : MonoBehaviour {
 	}
 	public void GameOver()
 	{
+		if (strikes < maxStrikes)
+			strikes = maxStrikes;
+		
 		GameoverScreen.instance.ShowMenu();
 		SequenceManager.instance.ClearSequences ();
-		Character.instance.ResetCombo();
-		SetGamePlayVariables(ColourType.Blank);
+		UserInterface.instance.GameOver();
+		currentMultiplier = Multiplier.None;
+		Character.instance.transform.DOScale(Vector3.zero,1.0f);
+		foreach (BackgroundQuadrant bq in backgroundQuads)
+		{
+			bq.Dissappear();
+		}
 	}
 	public void Reset()
 	{

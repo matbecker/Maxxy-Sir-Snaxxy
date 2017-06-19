@@ -32,8 +32,10 @@ public class Layout : MonoBehaviour {
 	}
 	void Update()
 	{
-		if (GameManager.instance.inGame)
+		if (GameManager.instance.inGame && UserInterface.instance.intermission)
 		{
+			var c = Character.instance;
+
 			if (Input.deviceOrientation == DeviceOrientation.Portrait)
 			{
 				if (currentLayout == ScreenState.Bottom)
@@ -125,22 +127,30 @@ public class Layout : MonoBehaviour {
 
 	public void AdjustBounds()
 	{
-		foreach (Transform b in bounds)
-		{
-			b.gameObject.SetActive(false);
-		}
 		switch(currentLayout)
 		{
 		case ScreenState.Bottom:
 			bounds[0].gameObject.SetActive(true);
+			bounds[1].gameObject.SetActive(false);
+			bounds[2].gameObject.SetActive(false);
+			bounds[3].gameObject.SetActive(false);
 			break;
 		case ScreenState.Right:
+			bounds[0].gameObject.SetActive(true);
 			bounds[1].gameObject.SetActive(true);
+			bounds[2].gameObject.SetActive(true);
+			bounds[3].gameObject.SetActive(false);
 			break;
 		case ScreenState.Top:
+			bounds[0].gameObject.SetActive(false);
+			bounds[1].gameObject.SetActive(false);
 			bounds[2].gameObject.SetActive(true);
+			bounds[3].gameObject.SetActive(false);
 			break;
 		case ScreenState.Left:
+			bounds[0].gameObject.SetActive(true);
+			bounds[1].gameObject.SetActive(false);
+			bounds[2].gameObject.SetActive(true);
 			bounds[3].gameObject.SetActive(true);
 			break;
 		}
@@ -155,23 +165,23 @@ public class Layout : MonoBehaviour {
 			{
 			case ScreenState.Bottom:
 				screenIndex = 0;
-				c.SetFallingSpeed(0.0f,-1.0f);
 				c.transform.DORotate(Vector3.zero, 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				c.SetFallingSpeed(0.0f,-1.0f);
 				break;
 			case ScreenState.Right:
 				screenIndex = 1;
-				c.SetFallingSpeed(1.0f,0.0f);
 				c.transform.DORotate(new Vector3(0.0f,0.0f,90.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				c.SetFallingSpeed(1.0f,0.0f);
 				break;
 			case ScreenState.Top:
 				screenIndex = 2;
-				c.SetFallingSpeed(0.0f,1.0f);
 				c.transform.DORotate(new Vector3(0.0f,0.0f,180.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				c.SetFallingSpeed(0.0f,1.0f);
 				break;
 			case ScreenState.Left:
 				screenIndex = 3;
-				c.SetFallingSpeed(-1.0f,0.0f);
 				c.transform.DORotate(new Vector3(0.0f,0.0f,270.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
+				c.SetFallingSpeed(-1.0f,0.0f);
 				break;
 			}
 			foreach (Node n in GetCurrentScreen().nodes)
@@ -180,27 +190,27 @@ public class Layout : MonoBehaviour {
 			}
 			SequenceManager.instance.AdjustSequenceSpeed(0.0f);
 			c.transform.DOMove(GetCurrentScreen().startPoint.position, 0.0f).OnComplete(() => {
-				c.transform.DOScale(Vector3.one * c.currentSize, 0.5f);
+				c.transform.DOScale(Vector3.one * c.currentSize, 0.5f).OnComplete(() => {
+					c.rb.constraints = (HelperFunctions.IsEven(screenIndex)) ? RigidbodyConstraints.FreezePositionY : RigidbodyConstraints.FreezePositionX;
+				});
 			});
 		});
-
-
 	}
 
 	// Use this for initialization
 	void Start () 
 	{
-		
-	}
-	public void Init()
-	{
 		foreach (Screen s in layouts)
 		{
 			foreach (Node n in s.nodes)
 			{
+				//disable all nodes
 				n.gameObject.SetActive(false);
 			}
 		}
+	}
+	public void Init()
+	{
 		SetLayout();
 	}
 }

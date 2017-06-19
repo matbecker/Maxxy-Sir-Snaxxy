@@ -15,7 +15,6 @@ public class Consumable : MonoBehaviour {
 	public int originalValue;
 	public int value;
 	public float pulseDuration;
-	public float weight;
 	public float fatness;
 	public bool collected;
 	public bool lastItem;

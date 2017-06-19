@@ -18,24 +18,20 @@ public class GameoverScreen : MonoBehaviour {
 		if (!instance)
 			instance = this;
 	}
-	void Start () 
-	{
-		
-	}
-	public void HideMenu()
+	public void HideMenu(float delay)
 	{
 		foreach (Button b in buttons)
 		{
-			b.transform.DOScaleY (0.0f, 1.0f).SetEase (Ease.InOutBounce, 1.0f, 0.5f);
+			b.transform.DOScaleY(0.0f,0.5f).SetEase(Ease.InElastic, 1.0f,0.25f);
 		}
-		buttonPanel.transform.DOScaleX(0.0f,1.0f).OnComplete(() => {
-			overlay.DOColor (new Color (0, 0, 0, 0), 1.0f).OnComplete(() => {
-				overlay.gameObject.SetActive (false);
-				foreach (Button b in buttons) {
-					b.gameObject.SetActive (false);
-				}
-				buttonPanel.gameObject.SetActive (false);
-			});
+
+		overlay.DOColor (new Color (0, 0, 0, 0), 1.0f).SetDelay(delay).OnComplete(() => {
+			overlay.gameObject.SetActive (false);
+			foreach (Button b in buttons) {
+				b.gameObject.SetActive (false);
+			}
+			buttonPanel.transform.localScale = Vector3.zero;
+			buttonPanel.gameObject.SetActive (false);
 		});
 
 	}
@@ -47,23 +43,38 @@ public class GameoverScreen : MonoBehaviour {
 		}
 		buttonPanel.gameObject.SetActive (true);
 		overlay.DOColor (Color.black, 1.0f).OnComplete(() => {
-			buttonPanel.transform.DOScaleX(1.0f,0.5f).OnComplete(() => {
-				foreach (Button b in buttons)
-				{
-					b.transform.DOScaleY(1.0f,1.0f).SetEase(Ease.OutBounce,1.0f,1.0f);
-				}
-				UserInterface.instance.DisplayLastWave();
-			});
+			buttonPanel.transform.localScale = Vector3.one;
+			foreach (Button b in buttons)
+			{
+				b.transform.DOScaleY(1.0f,1.0f).SetEase(Ease.OutElastic, 2.0f,1.0f);
+			}
+			UserInterface.instance.DisplayLastWave();
 		});
 	}
 
 	public void Retry()
 	{
-		HideMenu ();
+		HideMenu (1.0f);
 		Character.instance.Reset();
 		GameManager.instance.Reset();
 		UserInterface.instance.ResetUI();
 		SequenceManager.instance.Reset();
 		UserInterface.instance.PlayWaveIntermission();
+	}
+	public void Menu()
+	{
+		GameManager.instance.inGame = false;
+		SequenceManager.instance.DeleteSequences();
+		MainMenu.instance.gameObject.SetActive(true);
+		HideMenu(0.5f);
+
+		MainMenu.instance.overlay.DOColor(Color.black,1.0f).OnComplete(() => {
+			MainMenu.instance.Init();
+			UserInterface.instance.HideUI();
+		});
+	}
+	public void Quit()
+	{
+		Application.Quit();
 	}
 }

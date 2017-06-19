@@ -39,4 +39,11 @@ public static class HelperFunctions {
 		else
 			return false;
 	}
+	public static bool IsEven(int num)
+	{
+		if (num == 0 || num % 2 == 0)
+			return true;
+		else
+			return false;
+	}
 }

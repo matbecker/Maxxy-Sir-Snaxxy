@@ -14,9 +14,11 @@ public class UserInterface : MonoBehaviour {
 	public TextMeshProUGUI multiplier;
 	public TextMeshProUGUI failText;
 	public TextMeshProUGUI waveText;
+	public List<TextMeshProUGUI> ingameTextObjects;
 	public string[] inGameFailText;
 	public string[] inGameDropText;
 	public Image SizeOMeter;
+	public Image sizeOMeterBackground;
 	public string[] skinnyText;
 	public string[] fatText;
 	private Tween colorTween;
@@ -30,19 +32,24 @@ public class UserInterface : MonoBehaviour {
 		if (!instance)
 			instance = this;
 
-		waveText.color = Color.clear;
+		ResetUI();
+		score.transform.localScale = Vector3.zero;
 	}
 	// Use this for initialization
 	void Start () 
 	{
 		
 	}
+
 	public void Init()
 	{
 		ResetUI();
-		BounceScore();
+		score.transform.localScale = Vector3.zero;
 		counter = null;
-		PlayWaveIntermission();
+		score.transform.DOScale(Vector3.one, 1.0f).OnComplete(() => {
+			PlayWaveIntermission();
+			BounceScore();
+		});
 	}
 
 	public void BumpText(TextMeshProUGUI t)
@@ -252,9 +259,10 @@ public class UserInterface : MonoBehaviour {
 		score.text = "00";
 		multiplier.text = "";
 		SizeOMeter.transform.localScale = new Vector3 (1, 0, 1);
+		sizeOMeterBackground.color = new Color(255.0f,255.0f,255.0f, 0.5f);
 		failText.DOColor(Color.clear,0.0f);
 		waveInt = 1;
-		waveText.text = "wave" + waveInt;
+		waveText.text = "";
 		colorTween.Kill(true);
 		colorTween = SizeOMeter.DOColor(Color.black, 0.2f); 
 		colorTween = null;
@@ -282,11 +290,28 @@ public class UserInterface : MonoBehaviour {
 	}
 	public void BounceScore()
 	{
+		if (!GameManager.instance.inGame)
+			return;
+		
 		score.transform.DOScaleY(1.2f, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutCubic, 0.5f,0.5f).OnComplete(() => {
 			score.transform.DOScaleX(1.2f, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutCubic, 0.5f,0.5f).OnComplete(() => {
 				score.transform.localScale = Vector3.one;
 				BounceScore();
 			});
 		});
+	}
+	public void GameOver()
+	{
+		multiplier.transform.DOScale(Vector3.zero,1.0f);
+		combo.DOColor(Color.clear,1.0f);
+		sizeOMeterBackground.DOColor(Color.clear,1.0f);
+	}
+	public void HideUI()
+	{
+		waveText.DOColor(Color.clear,1.0f);
+		failText.DOColor(Color.clear, 1.0f);
+		score.transform.DOScale(Vector3.zero, 1.0f);
+		multiplier.transform.DOScale(Vector3.zero, 1.0f);
+
 	}
 }

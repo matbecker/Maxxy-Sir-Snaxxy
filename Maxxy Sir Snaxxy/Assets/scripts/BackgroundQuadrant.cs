@@ -15,6 +15,7 @@ public class BackgroundQuadrant : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		Dissappear();
 	}
 	public void Init()
 	{

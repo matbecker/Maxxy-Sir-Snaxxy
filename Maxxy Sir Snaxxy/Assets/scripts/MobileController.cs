@@ -17,11 +17,14 @@ public class MobileController : MonoBehaviour {
 		//maybe?
 		Input.multiTouchEnabled = false;	
 		moveTween = null;
+		character = Character.instance;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+		var vel = character.rb.velocity;
+
 		if (Input.GetMouseButtonDown (0) && !GameManager.instance.gameover && GameManager.instance.inGame) 
 		{
 			if (isMoving)
@@ -81,17 +84,19 @@ public class MobileController : MonoBehaviour {
 
 					newPos = Layout.instance.GetNextNode ().transform.position;
 				}
+				isMoving = true;
+				moveTween = character.transform.DOMoveX(newPos.x, character.moveduration).OnComplete(() => { 
+					isMoving = false; 
+					character.StopMoving();
+				});
 			}
-			else
-			{
-				
-			}
-			isMoving = true;
-			moveTween = character.transform.DOMoveX(newPos.x, character.moveduration).OnComplete(() => { 
-				isMoving = false; 
-				Character.instance.StopMoving();
-			});
 		}
+		if (Layout.instance.currentLayout == Layout.ScreenState.Left || Layout.instance.currentLayout == Layout.ScreenState.Right)
+		{
+			var dir = new Vector3(0.0f, Input.acceleration.y, 0.0f);
+			character.rb.velocity = (dir * 10.0f);
+		}
+
 
 	}
 }

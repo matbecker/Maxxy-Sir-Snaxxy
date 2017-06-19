@@ -61,12 +61,9 @@ public class SequenceManager : MonoBehaviour {
 		if (!instance)
 			instance = this;
 	}
-	void Start () 
-	{
-		
-	}
 	public void Init()
 	{
+		Reset();
 		var s = InstantiateSequence();
 		queuedSequences.Add (s);
 		totalWaveWeight = waves.Sum(w => w.weight);
@@ -155,6 +152,14 @@ public class SequenceManager : MonoBehaviour {
 		foreach (Sequence s in queuedSequences) {
 			s.EndSequence ();
 			s.isPlaying = false;
+		}
+	}
+	public void DeleteSequences()
+	{
+		queuedSequences.Clear();
+		foreach (var s in queuedSequences)
+		{
+			Destroy(s);
 		}
 	}
 
