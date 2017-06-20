@@ -19,6 +19,7 @@ public class UserInterface : MonoBehaviour {
 	public string[] inGameDropText;
 	public Image SizeOMeter;
 	public Image sizeOMeterBackground;
+	public Image arrow;
 	public string[] skinnyText;
 	public string[] fatText;
 	private Tween colorTween;
@@ -38,7 +39,7 @@ public class UserInterface : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		
+		arrow.color = Color.clear;
 	}
 
 	public void Init()
@@ -47,7 +48,7 @@ public class UserInterface : MonoBehaviour {
 		score.transform.localScale = Vector3.zero;
 		counter = null;
 		score.transform.DOScale(Vector3.one, 1.0f).OnComplete(() => {
-			PlayWaveIntermission();
+			PlayWaveIntermission(0.0f);
 			BounceScore();
 		});
 	}
@@ -70,11 +71,11 @@ public class UserInterface : MonoBehaviour {
 			t =	waveText.transform.DOScale(Vector3.zero,1.0f);
 			break;
 		case 1:
-			waveText.transform.DORotate(new Vector3(-360.0f,0.0f,0.0f),1.0f, RotateMode.FastBeyond360);
+			waveText.transform.DORotate(new Vector3(-360.0f,0.0f,waveText.rectTransform.rotation.eulerAngles.z),1.0f, RotateMode.FastBeyond360);
 			t = waveText.transform.DOScaleY(0.0f,1.0f).SetEase(Ease.InBack,1.0f,1.0f).SetDelay(1.0f);
 			break;
 		case 2:
-			waveText.transform.DORotate(new Vector3(0.0f,180.0f,0.0f), 1.0f, RotateMode.Fast);
+			waveText.transform.DORotate(new Vector3(0.0f,180.0f,waveText.rectTransform.rotation.eulerAngles.z), 1.0f, RotateMode.Fast);
 			t = waveText.DOColor(Color.clear,1.0f);
 			break;
 		case 3:
@@ -134,10 +135,14 @@ public class UserInterface : MonoBehaviour {
 		return t;
 
 	}
-	public void PlayWaveIntermission()
+	public void PlayWaveIntermission(float delay)
 	{
+		waveText.rectTransform.DORotate(new Vector3(0.0f,0.0f, Layout.instance.GetCurrentScreen().rotation),0.0f, RotateMode.Fast);
+		arrow.DOColor(Color.white, 0.5f).SetDelay(0.25f);
+		arrow.rectTransform.DOAnchorPosY(-80.0f,0.5f).SetLoops(10,LoopType.Yoyo).SetEase(Ease.InOutBack,1.0f,0.25f);
 		intermission = true;
-		PlayRandomWaveIntro().OnComplete(() => {
+		PlayRandomWaveIntro().SetDelay(delay).OnComplete(() => {
+			arrow.DOColor(Color.clear,0.5f).SetDelay(0.5f);
 			PlayRandomWaveFinish().OnComplete(() => {
 				SequenceManager.instance.GetCurrentSequence().SpawnSequence();
 				intermission = false;
@@ -312,6 +317,5 @@ public class UserInterface : MonoBehaviour {
 		failText.DOColor(Color.clear, 1.0f);
 		score.transform.DOScale(Vector3.zero, 1.0f);
 		multiplier.transform.DOScale(Vector3.zero, 1.0f);
-
 	}
 }

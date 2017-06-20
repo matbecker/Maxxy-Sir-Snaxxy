@@ -203,7 +203,8 @@ public class GameManager : MonoBehaviour {
 		{
 			if (c.lastItem && !UserInterface.instance.intermission)
 			{
-				UserInterface.instance.PlayWaveIntermission();
+				Layout.instance.SetLayout(true);
+				UserInterface.instance.PlayWaveIntermission(0.0f);
 				Debug.Log("new wave started by " + c.name);
 
 			}

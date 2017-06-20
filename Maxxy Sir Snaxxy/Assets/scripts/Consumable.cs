@@ -18,11 +18,13 @@ public class Consumable : MonoBehaviour {
 	public float fatness;
 	public bool collected;
 	public bool lastItem;
+	public bool move;
 	public string[] gameoverMessages;
 
 	// Use this for initialization
 	void Start () 
 	{
+		transform.DORotate(new Vector3(0.0f,0.0f, Layout.instance.GetCurrentScreen().rotation),0.0f, RotateMode.Fast);
 		originalValue = value;
 		sr.gameObject.transform.DOScale (Vector3.one * 1.2f, pulseDuration).SetLoops (-1, LoopType.Yoyo);
 
@@ -31,10 +33,13 @@ public class Consumable : MonoBehaviour {
 	}
 	void Update()
 	{
-		var vel = rb.velocity;
-		vel.Normalize();
-		vel += SequenceManager.instance.sequenceSpeed;
-		rb.velocity = vel;
+		if (!UserInterface.instance.intermission)
+		{
+			var vel = rb.velocity;
+			vel.Normalize();
+			vel += SequenceManager.instance.sequenceSpeed;
+			rb.velocity = vel;
+		}
 	}
 	public void VoidItem()
 	{

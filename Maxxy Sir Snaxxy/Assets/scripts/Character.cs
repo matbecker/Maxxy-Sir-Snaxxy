@@ -234,7 +234,7 @@ public class Character : MonoBehaviour {
 		score = 0;
 		currentSize = midSize;
 		transform.localScale = Vector3.one * currentSize;
-		transform.position = Layout.instance.GetCurrentScreen().startPoint.position;
+//		transform.position = Layout.instance.layouts[0].startPoint.position;
 	}
 	public void ResetCombo()
 	{

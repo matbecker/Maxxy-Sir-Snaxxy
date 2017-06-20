@@ -55,11 +55,12 @@ public class GameoverScreen : MonoBehaviour {
 	public void Retry()
 	{
 		HideMenu (1.0f);
+		Layout.instance.Init();
 		Character.instance.Reset();
 		GameManager.instance.Reset();
 		UserInterface.instance.ResetUI();
 		SequenceManager.instance.Reset();
-		UserInterface.instance.PlayWaveIntermission();
+		UserInterface.instance.PlayWaveIntermission(1.0f);
 	}
 	public void Menu()
 	{

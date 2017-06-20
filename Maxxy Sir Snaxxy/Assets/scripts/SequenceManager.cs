@@ -53,6 +53,7 @@ public class SequenceManager : MonoBehaviour {
 
 	private Wave currentWave;
 	private int totalWaveWeight;
+	public float currentSpeed;
 
 	// Use this for initialization
 
@@ -101,7 +102,6 @@ public class SequenceManager : MonoBehaviour {
 		AdjustSequenceSpeed(0.25f);
 		sequenceMin += 5;
 		sequenceMax += 5;
-
 	}
 
 	public Sequence InstantiateSequence()
@@ -111,19 +111,21 @@ public class SequenceManager : MonoBehaviour {
 
 	public void AdjustSequenceSpeed(float amount)
 	{
+		currentSpeed += amount;
+		var neg = (currentSpeed * -1);
 		switch (Layout.instance.currentLayout)
 		{
 		case Layout.ScreenState.Bottom:
-			sequenceSpeed = new Vector3(0.0f,sequenceSpeed.y - amount, 0.0f);
+			sequenceSpeed = new Vector3(0.0f, neg, 0.0f);
 			break;
 		case Layout.ScreenState.Right:
-			sequenceSpeed = new Vector3(sequenceSpeed.x + amount, 0.0f,0.0f);
+			sequenceSpeed = new Vector3(currentSpeed, 0.0f, 0.0f);
 			break;
 		case Layout.ScreenState.Top:
-			sequenceSpeed = new Vector3(0.0f,sequenceSpeed.y + amount, 0.0f);
+			sequenceSpeed = new Vector3(0.0f, currentSpeed, 0.0f);
 			break;
 		case Layout.ScreenState.Left:
-			sequenceSpeed = new Vector3(sequenceSpeed.x - amount, 0.0f, 0.0f);
+			sequenceSpeed = new Vector3(neg, 0.0f, 0.0f);
 			break;
 		}
 	}
@@ -132,7 +134,8 @@ public class SequenceManager : MonoBehaviour {
 	{
 		sequenceMin = 5;
 		sequenceMax = 10;
-		sequenceSpeed = new Vector3(0.0f,-1.5f,0.0f);
+		currentSpeed = 1.5f;
+		sequenceSpeed = new Vector3(0.0f,currentSpeed,0.0f);
 
 		foreach (Sequence s in queuedSequences) {
 			s.isPlaying = true;

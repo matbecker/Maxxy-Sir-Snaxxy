@@ -20,29 +20,56 @@ public class Sequence : MonoBehaviour {
 		{
 			if (!isPlaying)
 				isPlaying = true;
-
 			SequenceManager.instance.SetRandomWave();
 
 			var consumableAmount = Random.Range (SequenceManager.instance.sequenceMin, SequenceManager.instance.sequenceMax);
-
+			var oldCol = 3;
 			for (int i = 0; i < consumableAmount; i++) 
 			{
 				//pick a random column
 				var col = Random.Range(0,Layout.instance.GetCurrentScreen().columns.Length);
-				//instantiate a consumable in a radom column with an increasing y value
-				var consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetCurrentScreen().columns[col].position.x, Layout.instance.GetBounds().height + (i * 1.5f), 0.0f), Quaternion.identity) as Consumable; 
 
+				Consumable consumable = null;
+
+				switch(Layout.instance.currentLayout)
+				{
+				case Layout.ScreenState.Bottom:
+					//instantiate a consumable in a radom column with an increasing y value
+					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetCurrentScreen().columns[col].position.x, Layout.instance.GetBounds().y + (i * 1.5f), 0.0f), Quaternion.identity) as Consumable; 
+					break;
+				case Layout.ScreenState.Right:
+					//while (col != oldCol + 1 || col != oldCol - 1)
+					//col = Random.Range(0,Layout.instance.GetCurrentScreen().columns.Length);
+					//instantiate a consumable in a radom column with an decreasing x value
+					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetBounds().x - (i * 1.0f), Layout.instance.GetCurrentScreen().columns[col].position.y, 0.0f), Quaternion.identity) as Consumable; 
+					break;
+				case Layout.ScreenState.Top:
+					//instantiate a consumable in a radom column with an decreasing y value
+					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetCurrentScreen().columns[col].position.x, Layout.instance.GetBounds().y - (i * 1.5f), 0.0f), Quaternion.identity) as Consumable; 
+					break;
+				case Layout.ScreenState.Left:
+					//instantiate a consumable in a radom column with an increasing x value
+					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetBounds().x + (i * 1.0f), Layout.instance.GetCurrentScreen().columns[col].position.y, 0.0f), Quaternion.identity) as Consumable; 
+					break;
+				}
+					
+			
 				sequenceConsumables.Add (consumable);
 				consumable.mySequence = this;
 
 				if (i == consumableAmount - 1) //last item in the list
 					consumable.lastItem = true;
+				
+				//save the old column
+				oldCol = col;
 			}
 			if (sequenceNumber > 0)
 			{
 				var rand = Random.value;
 				if (rand > 0.5f)
 					GameManager.instance.SetBackgroundImages();
+
+
 			}
 			sequenceNumber++;
 			UserInterface.instance.waveInt++;
