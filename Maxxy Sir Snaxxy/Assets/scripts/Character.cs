@@ -30,6 +30,7 @@ public class Character : MonoBehaviour {
 		}
 	}
 	public float moveduration;
+	public float speed;
 	public int score;
 
 	private Vector3 pos; 
@@ -83,6 +84,10 @@ public class Character : MonoBehaviour {
 	public void SetFallingSpeed(float x, float y)
 	{
 		fallingSpeed = new Vector3(x,y,0.0f);
+	}
+	public void SetScoreTextRotation(float rot)
+	{
+		consumableValueText.transform.DORotate(new Vector3(0.0f,0.0f,rot),0.5f,RotateMode.Fast);
 	}
 	private void OnTriggerEnter(Collider other)
 	{
@@ -206,26 +211,37 @@ public class Character : MonoBehaviour {
 	{
 		if (currentSize <= 0.25f) {
 			moveduration = 0.1f;
+			speed = 22.0f;
 		} else if (currentSize >= 0.25f && currentSize < 0.50f) {
 			moveduration = 0.15f;
+			speed = 20.0f;
 		} else if (currentSize >= 0.5f && currentSize < 0.75f) {
 			moveduration = 0.2f;
+			speed = 18.0f;
 		} else if (currentSize >= 0.75f && currentSize < 1.0f) {
 			moveduration = 0.225f;
+			speed = 16.0f;
 		} else if (currentSize >= 1.0f && currentSize < 1.25f) {
 			moveduration = 0.25f;
+			speed = 14.0f;
 		} else if (currentSize >= 1.25f && currentSize < 1.50f) {
 			moveduration = 0.275f;
+			speed = 12.0f;
 		} else if (currentSize >= 1.5f && currentSize < 1.75f) {
 			moveduration = 0.3f;
+			speed = 10.0f;
 		} else if (currentSize >= 1.75f && currentSize < 2.0f) {
 			moveduration = 0.35f;
+			speed = 8.0f;
 		} else if (currentSize >= 2.0f && currentSize < 2.25f) {
 			moveduration = 0.4f;
+			speed = 6.0f;
 		} else if (currentSize >= 2.25f && currentSize < 2.5f) {
 			moveduration = 0.45f;
+			speed = 4.0f;
 		} else if (currentSize >= 2.5f && currentSize < 2.75f) {
 			moveduration = 0.5f;
+			speed = 2.0f;
 		}
 		UserInterface.instance.AdjustSizeOMeter ();
 	}

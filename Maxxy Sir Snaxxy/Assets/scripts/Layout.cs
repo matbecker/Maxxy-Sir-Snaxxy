@@ -152,29 +152,25 @@ public class Layout : MonoBehaviour {
 	}
 	public void Adjustcolliders()
 	{
+		foreach (var c in colliders)
+		{
+			c.gameObject.SetActive(false);
+		}
 		switch(currentLayout)
 		{
 		case ScreenState.Bottom:
 			colliders[0].gameObject.SetActive(true);
-			colliders[1].gameObject.SetActive(false);
-			colliders[2].gameObject.SetActive(false);
-			colliders[3].gameObject.SetActive(false);
 			break;
 		case ScreenState.Right:
 			colliders[0].gameObject.SetActive(true);
 			colliders[1].gameObject.SetActive(true);
 			colliders[2].gameObject.SetActive(true);
-			colliders[3].gameObject.SetActive(false);
 			break;
 		case ScreenState.Top:
-			colliders[0].gameObject.SetActive(false);
-			colliders[1].gameObject.SetActive(false);
 			colliders[2].gameObject.SetActive(true);
-			colliders[3].gameObject.SetActive(false);
 			break;
 		case ScreenState.Left:
-			colliders[0].gameObject.SetActive(true);
-			colliders[1].gameObject.SetActive(false);
+			colliders[0].gameObject.SetActive(true); 
 			colliders[2].gameObject.SetActive(true);
 			colliders[3].gameObject.SetActive(true);
 			break;
@@ -214,12 +210,38 @@ public class Layout : MonoBehaviour {
 			{
 				n.gameObject.SetActive(true);
 			}
+			if (HelperFunctions.IsEven(screenIndex))
+			{
+				foreach (BackgroundQuadrant bq in GameManager.instance.backgroundQuads)
+				{
+					bq.portraitView = true;
+					if (bq.transform.localScale.x > 2.0f)
+					{
+						bq.transform.DOScaleX(1.0f,0.5f).OnComplete(() => {
+							bq.transform.DOScaleY(1.0f,0.5f);
+						});
+					}
+				}
+			}
+			else
+			{
+				foreach (BackgroundQuadrant bq in GameManager.instance.backgroundQuads)
+				{
+					bq.portraitView = false;
+					//if the y scale is greater than 0.5
+					if (bq.transform.localScale.y > 0.5f)
+					{
+						//transform quadrants 
+						bq.transform.DOScaleY(0.34f,0.5f).OnComplete(() => {
+							bq.transform.DOScaleX(3.0f,0.5f);
+						});
+					}
+				}
+			}
 			SequenceManager.instance.AdjustSequenceSpeed(0.0f);
+			c.SetScoreTextRotation(GetCurrentScreen().rotation);
 			c.transform.DOMove(GetCurrentScreen().startPoint.position, 0.0f).OnComplete(() => {
-				c.transform.DOScale(Vector3.one * c.currentSize, 0.5f).OnComplete(() => {
-					c.rb.velocity = Vector3.zero;
-					c.rb.constraints = (HelperFunctions.IsEven(screenIndex)) ? RigidbodyConstraints.FreezePositionY : RigidbodyConstraints.FreezePositionX;
-				});
+				c.Resize();
 			});
 		});
 	}

@@ -215,14 +215,11 @@ public class UserInterface : MonoBehaviour {
 			multiplierTween.Kill(false);
 			multiplierTween = null;
 		}
-		if (multiplierTween == null)
-		{
-			multiplierTween = multiplier.rectTransform.DOScale (Vector3.one * mSize, 1.0f);
-			multiplierTween.OnComplete(() => {
-				multiplierTween.Kill(true);
-				multiplierTween = null;
-			});
-		}
+		multiplierTween = multiplier.rectTransform.DOScale (Vector3.one * mSize, 1.0f);
+		multiplierTween.OnComplete(() => {
+			multiplierTween.Kill(true);
+			multiplierTween = null;
+		});
 	}
 	public IEnumerator ScoreCounter()
 	{

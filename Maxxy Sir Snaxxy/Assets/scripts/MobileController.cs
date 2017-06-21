@@ -10,7 +10,6 @@ public class MobileController : MonoBehaviour {
 	public bool isMoving;
 	public bool isFlipping;
 	Tween moveTween;
-	Tween spinTween;
 	// Use this for initialization
 	void Start () 
 	{
@@ -27,44 +26,35 @@ public class MobileController : MonoBehaviour {
 
 		if (Input.GetMouseButtonDown (0) && !GameManager.instance.gameover && GameManager.instance.inGame) 
 		{
-			if (isMoving)
-				return;
-			
-			touchPos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-
 			RaycastHit hit;
 			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 			if (Physics.Raycast(ray, out hit)) {
-				
+
 				if (hit.rigidbody != null && !isFlipping) 
 				{
 					if (hit.rigidbody.tag == "Player") 
 					{
+						isFlipping = true;
 						character.GetComponentInChildren<MeshRenderer> ().material.DOColor (character.NextColour (), 0.75f);
 						character.transform.DORotate (new Vector3 (360.0f, 0.0f, character.transform.rotation.eulerAngles.z), 0.3f, RotateMode.FastBeyond360).OnComplete (() => {
-							isFlipping = false;			
+							isFlipping = false;	
 						});
-						isFlipping = true;
-						return;
 					} 
-					else
-						return;
 				}
 			}
-				
+
+			if (UserInterface.instance.intermission || isMoving)
+				return;
+
+
+			touchPos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
 			if (moveTween != null) 
 			{
 				moveTween.Kill (false);
 				moveTween = null;
 			}
-			if (spinTween != null) 
-			{
-				spinTween.Kill (true);
-				spinTween = null;
-			}
-
-			
 			Vector3 newPos = Vector3.zero;
 
 			if (Layout.instance.currentLayout == Layout.ScreenState.Bottom || Layout.instance.currentLayout == Layout.ScreenState.Top)
@@ -93,10 +83,12 @@ public class MobileController : MonoBehaviour {
 		}
 		if (Layout.instance.currentLayout == Layout.ScreenState.Left || Layout.instance.currentLayout == Layout.ScreenState.Right)
 		{
+			if (UserInterface.instance.intermission)
+				return;
+			
 			var dir = new Vector3(0.0f, Input.acceleration.y, 0.0f);
-			character.rb.velocity = (dir * 10.0f);
+			transform.Translate(dir * character.speed * Time.deltaTime);
 		}
-
 
 	}
 }
