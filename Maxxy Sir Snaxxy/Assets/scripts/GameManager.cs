@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour {
 	public Color[] backgroundColours;
 	public int colourIndex;
 
+	private bool startTimer;
+	private float delay;
+
 	public int strikes;
 	public int maxStrikes;
 
@@ -55,7 +58,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (inGame)
+		if (inGame && !UserInterface.instance.intermission)
 		{
 			int rand = UnityEngine.Random.Range (0, 1000);
 
@@ -65,6 +68,15 @@ public class GameManager : MonoBehaviour {
 				Camera.main.DOColor (backgroundColours [colourIndex], 2.0f);
 
 				currentColour = HelperFunctions.SetColourType (colourIndex);
+			}
+		}
+		if (startTimer)
+		{
+			//check for new wave every 0.5 seconds
+			delay -= Time.deltaTime;
+			if (delay < 0.0f)
+			{
+				CheckForNewWave();
 			}
 		}
 
@@ -127,8 +139,8 @@ public class GameManager : MonoBehaviour {
 				break;
 			}
 		}
-		else
-			Debug.Log(m.ToString());
+//		else
+//			Debug.Log(m.ToString());
 		//set the current multiplier
 		currentMultiplier = m;
 		//update the UI Multiplier
@@ -201,13 +213,33 @@ public class GameManager : MonoBehaviour {
 	{
 		if (!gameover)
 		{
+			//if the last item has been collected and its not intermission
 			if (c.lastItem && !UserInterface.instance.intermission)
 			{
-				Layout.instance.SetLayout(true);
-				UserInterface.instance.PlayWaveIntermission(0.0f);
-				Debug.Log("new wave started by " + c.name);
-
+				delay = 0.5f;
+				startTimer = true;
+				return;
 			}
 		}	
+	}
+	public void CheckForNewWave()
+	{
+		if (!gameover)
+		{
+			startTimer = false;
+			//if all the sequence consumables are gone
+			if (SequenceManager.instance.GetCurrentSequence().newSequence)
+			{
+				//set a new layout and start a new wave
+				Layout.instance.SetLayout(true);
+				UserInterface.instance.PlayWaveIntermission(0.0f);
+			}
+			else
+			{
+				delay = 0.5f;
+				startTimer = true;
+				return;
+			}
+		}
 	}
 }

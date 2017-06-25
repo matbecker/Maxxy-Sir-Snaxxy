@@ -44,7 +44,7 @@ public class MobileController : MonoBehaviour {
 				}
 			}
 
-			if (UserInterface.instance.intermission || isMoving)
+			if (UserInterface.instance.intermission || isMoving || isFlipping)
 				return;
 
 
@@ -60,19 +60,21 @@ public class MobileController : MonoBehaviour {
 			if (Layout.instance.currentLayout == Layout.ScreenState.Bottom || Layout.instance.currentLayout == Layout.ScreenState.Top)
 			{
 				//var nodePos = Camera.main.ScreenToViewportPoint(Character.instance.currentNode.transform.position);
-				if (touchPos.x < 0.5f) 
-				{
-					if (character.currentNode.index == 0) 
-						return;
 
-					newPos = Layout.instance.GetPrevNode ().transform.position;
-				} 
-				if (touchPos.x > 0.5f) 
+				if (character.currentNode.index == 0)
 				{
-					if (character.currentNode.index == Layout.instance.GetCurrentScreen ().nodes.Length - 1)
-						return;
-
 					newPos = Layout.instance.GetNextNode ().transform.position;
+				}
+				else if (character.currentNode.index == 1)
+				{
+					if (touchPos.x > 0.5f)
+						newPos = Layout.instance.GetNextNode ().transform.position;
+					else
+						newPos = Layout.instance.GetPrevNode ().transform.position;
+				}
+				else
+				{
+					newPos = Layout.instance.GetPrevNode ().transform.position;
 				}
 				isMoving = true;
 				moveTween = character.transform.DOMoveX(newPos.x, character.moveduration).OnComplete(() => { 

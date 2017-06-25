@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class Consumable : MonoBehaviour {
 
@@ -20,6 +21,7 @@ public class Consumable : MonoBehaviour {
 	public bool lastItem;
 	public bool move;
 	public string[] gameoverMessages;
+	public Vector2 menuSpeed;
 
 	// Use this for initialization
 	void Start () 
@@ -27,7 +29,7 @@ public class Consumable : MonoBehaviour {
 		transform.DORotate(new Vector3(0.0f,0.0f, Layout.instance.GetCurrentScreen().rotation),0.0f, RotateMode.Fast);
 		originalValue = value;
 		sr.gameObject.transform.DOScale (Vector3.one * 1.2f, pulseDuration).SetLoops (-1, LoopType.Yoyo);
-
+		
 		if (GameManager.instance.gameover)
 			VoidItem();
 	}
@@ -58,7 +60,7 @@ public class Consumable : MonoBehaviour {
 
 			Destroy (gameObject);
 		});
-		Debug.Log("you got the " + type);
+//		Debug.Log("you got the " + type);
 	}
 	public void NotCollected()
 	{

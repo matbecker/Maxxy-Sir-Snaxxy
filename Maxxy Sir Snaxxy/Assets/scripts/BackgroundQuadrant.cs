@@ -38,13 +38,16 @@ public class BackgroundQuadrant : MonoBehaviour {
 		if (portraitView)
 		{
 			//make the background appear
-			backgroundImage.transform.DOScaleX(1.0f,1.0f).SetEase(Ease.OutBack, 0.5f,1.0f);
+			backgroundImage.transform.DOScaleX(1.0f,1.0f).SetEase(Ease.OutBack, 0.5f,1.0f).OnComplete(() => {
+				isVisible = true;
+			});
 		}
 		else
 		{
-			backgroundImage.transform.DOScaleY(0.34f,1.0f).SetEase(Ease.OutBack,0.5f,1.0f);
+			backgroundImage.transform.DOScaleY(0.3333f,1.0f).SetEase(Ease.OutBack,0.5f,1.0f).OnComplete(() => {
+				isVisible = true;
+			});
 		}
-		isVisible = true;
 	}
 	public void Dissappear()
 	{
@@ -52,14 +55,15 @@ public class BackgroundQuadrant : MonoBehaviour {
 		{
 			backgroundImage.transform.DOScaleX(0.0f,1.0f).SetEase(Ease.InBack, 0.5f,1.0f).OnComplete(() => {
 				backgroundImage.transform.localScale = new Vector3(0.0f,1.0f,1.0f);
+				isVisible = false;
 			});
 		}
 		else
 		{
 			backgroundImage.transform.DOScaleY(0.0f,1.0f).SetEase(Ease.InBack, 0.5f,1.0f).OnComplete(() => {
 				backgroundImage.transform.localScale = new Vector3(0.0f,1.0f,1.0f);
+				isVisible = false;
 			});
 		}
-		isVisible = false;
 	}
 }

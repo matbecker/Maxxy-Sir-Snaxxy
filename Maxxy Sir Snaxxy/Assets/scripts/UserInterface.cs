@@ -26,6 +26,7 @@ public class UserInterface : MonoBehaviour {
 	private Coroutine counter;
 	private Tween multiplierTween;
 	public bool intermission;
+	private List<TextMeshProUGUI> movingUI;
 
 	public int waveInt = 1;
 	void Awake()
@@ -35,6 +36,10 @@ public class UserInterface : MonoBehaviour {
 
 		ResetUI();
 		score.transform.localScale = Vector3.zero;
+		movingUI = new List<TextMeshProUGUI>();
+		movingUI.Add(score);
+		movingUI.Add(multiplier);
+		movingUI.Add(combo);
 	}
 	// Use this for initialization
 	void Start () 
@@ -137,6 +142,7 @@ public class UserInterface : MonoBehaviour {
 	}
 	public void PlayWaveIntermission(float delay)
 	{
+//		Debug.Log("intermission started");
 		waveText.rectTransform.DORotate(new Vector3(0.0f,0.0f, Layout.instance.GetCurrentScreen().rotation),0.0f, RotateMode.Fast);
 		arrow.DOColor(Color.white, 0.5f).SetDelay(0.25f);
 		arrow.rectTransform.DOAnchorPosY(-80.0f,0.5f).SetLoops(10,LoopType.Yoyo).SetEase(Ease.InOutBack,1.0f,0.25f);
@@ -146,6 +152,7 @@ public class UserInterface : MonoBehaviour {
 			PlayRandomWaveFinish().OnComplete(() => {
 				SequenceManager.instance.GetCurrentSequence().SpawnSequence();
 				intermission = false;
+//				Debug.Log("intermission ended");
 			});
 		});
 	}
@@ -304,6 +311,7 @@ public class UserInterface : MonoBehaviour {
 	}
 	public void GameOver()
 	{
+		MoveUI(true);
 		multiplier.transform.DOScale(Vector3.zero,1.0f);
 		combo.DOColor(Color.clear,1.0f);
 		sizeOMeterBackground.DOColor(Color.clear,1.0f);
@@ -314,5 +322,17 @@ public class UserInterface : MonoBehaviour {
 		failText.DOColor(Color.clear, 1.0f);
 		score.transform.DOScale(Vector3.zero, 1.0f);
 		multiplier.transform.DOScale(Vector3.zero, 1.0f);
+	}
+	public void MoveUI(bool gameover)
+	{
+		var cl = Layout.instance.GetCurrentScreen();
+
+		if (gameover)
+			cl = Layout.instance.layouts[0];
+		for (int i = 0; i < movingUI.Count; i++)
+		{
+			movingUI[i].rectTransform.DOAnchorPos(cl.UIpositions[i],1.0f);
+			movingUI[i].rectTransform.DORotate(new Vector3(0.0f,0.0f,cl.rotation),1.0f,RotateMode.Fast);
+		}
 	}
 }

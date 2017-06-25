@@ -8,6 +8,13 @@ public class Sequence : MonoBehaviour {
 	public List<Consumable> sequenceConsumables;
 	public int sequenceNumber = 0;
 	public bool isPlaying;
+	public bool newSequence
+	{
+		get
+		{
+			return sequenceConsumables.Count < 1;
+		}
+	}
 
 	// Use this for initialization
 	void Start () 
@@ -38,8 +45,14 @@ public class Sequence : MonoBehaviour {
 					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetCurrentScreen().columns[col].position.x, Layout.instance.GetBounds().y + (i * 1.5f), 0.0f), Quaternion.identity) as Consumable; 
 					break;
 				case Layout.ScreenState.Right:
-					//while (col != oldCol + 1 || col != oldCol - 1)
-					//col = Random.Range(0,Layout.instance.GetCurrentScreen().columns.Length);
+					if (oldCol == 0)
+						col = 1;
+					else if (oldCol == Layout.instance.GetCurrentScreen().columns.Length - 1)
+						col = Layout.instance.GetCurrentScreen().columns.Length - 2;
+					else
+					{
+						col = (Random.value > 0.5f) ? (oldCol + 1) : (oldCol - 1);
+					}
 					//instantiate a consumable in a radom column with an decreasing x value
 					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetBounds().x - (i * 1.0f), Layout.instance.GetCurrentScreen().columns[col].position.y, 0.0f), Quaternion.identity) as Consumable; 
 					break;
@@ -48,6 +61,14 @@ public class Sequence : MonoBehaviour {
 					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetCurrentScreen().columns[col].position.x, Layout.instance.GetBounds().y - (i * 1.5f), 0.0f), Quaternion.identity) as Consumable; 
 					break;
 				case Layout.ScreenState.Left:
+					if (oldCol == 0)
+						col = 1;
+					else if (oldCol == Layout.instance.GetCurrentScreen().columns.Length - 1)
+						col = Layout.instance.GetCurrentScreen().columns.Length - 2;
+					else
+					{
+						col = (Random.value > 0.5f) ? (oldCol + 1) : (oldCol - 1);
+					}
 					//instantiate a consumable in a radom column with an increasing x value
 					consumable = Instantiate(SequenceManager.instance.GetRandomConsumable(), new Vector3(Layout.instance.GetBounds().x + (i * 1.0f), Layout.instance.GetCurrentScreen().columns[col].position.y, 0.0f), Quaternion.identity) as Consumable; 
 					break;
@@ -79,6 +100,11 @@ public class Sequence : MonoBehaviour {
 				SequenceManager.instance.IncreaseDifficulty ();
 				return;
 			} 
+//			if (UserInterface.instance.intermission)
+//			{
+//				UserInterface.instance.intermission = false;
+//				Debug.Log("shut off intermission");
+//			}
 		}
 
 	}

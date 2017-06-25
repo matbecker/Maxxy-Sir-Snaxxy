@@ -21,15 +21,12 @@ public class Boundary : MonoBehaviour {
 						GameManager.instance.Strike(consumable);
 						Character.instance.DisplayInGameFailText(UserInterface.instance.inGameDropText, UserInterface.instance.inGameDropText.Length);
 						consumable.NotCollected();
-						Debug.Log("you dropped the delicious " + consumable.name);
+//						Debug.Log("you dropped the delicious " + consumable.name);
 					}
 				});
 				break;
-			case Consumable.Type.Clover:
-			case Consumable.Type.Cracker:
-			case Consumable.Type.Dud:
-			case Consumable.Type.Treat:
-			case Consumable.Type.Vegetable:
+			case Consumable.Type.Clover: case Consumable.Type.Cracker: case Consumable.Type.Dud:
+			case Consumable.Type.Treat:  case Consumable.Type.Vegetable:
 				consumable.NotCollected();
 				break;
 			}

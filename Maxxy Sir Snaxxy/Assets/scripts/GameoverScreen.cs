@@ -40,6 +40,7 @@ public class GameoverScreen : MonoBehaviour {
 		overlay.gameObject.SetActive (true);
 		foreach (Button b in buttons) {
 			b.gameObject.SetActive (true);
+			b.image.color = MainMenu.instance.GetRandomColour();
 		}
 		buttonPanel.gameObject.SetActive (true);
 		overlay.DOColor (Color.black, 1.0f).OnComplete(() => {
@@ -70,7 +71,7 @@ public class GameoverScreen : MonoBehaviour {
 		HideMenu(0.5f);
 
 		MainMenu.instance.overlay.DOColor(Color.black,1.0f).OnComplete(() => {
-			MainMenu.instance.Init();
+			MainMenu.instance.Init(2.3f);
 			UserInterface.instance.HideUI();
 		});
 	}

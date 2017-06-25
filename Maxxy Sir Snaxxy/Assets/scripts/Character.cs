@@ -60,6 +60,7 @@ public class Character : MonoBehaviour {
 	{
 		currentSize = midSize;
 		colourIndex = 0;
+		score = 0;
 	}
 	public void StopMoving()
 	{
@@ -81,9 +82,9 @@ public class Character : MonoBehaviour {
 			rb.velocity = vel;
 		}
 	}
-	public void SetFallingSpeed(float x, float y)
+	public void SetFallingSpeed(Vector2 v)
 	{
-		fallingSpeed = new Vector3(x,y,0.0f);
+		fallingSpeed = new Vector3(v.x,v.y,0.0f);
 	}
 	public void SetScoreTextRotation(float rot)
 	{
@@ -124,7 +125,7 @@ public class Character : MonoBehaviour {
 				score += consumable.value;
 				//increase strikes
 				GameManager.instance.Strike(consumable);
-				Debug.Log("you ate the disgusting " + consumable.name);
+//				Debug.Log("you ate the disgusting " + consumable.name);
 				break;
 			case Consumable.Type.Cracker:
 				IncreaseCombo();
@@ -200,9 +201,9 @@ public class Character : MonoBehaviour {
 		{
 			transform.DOScale (Vector3.one * currentSize, 1.0f).SetEase (Ease.OutBounce,1.0f,1.0f).OnComplete(() => {
 				if (HelperFunctions.IsEven(Layout.instance.screenIndex))
-					rb.constraints = RigidbodyConstraints.FreezePositionY;
+					rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
 				else
-					rb.constraints = RigidbodyConstraints.FreezePositionX;
+					rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
 			});
 		}
 		AdjustStats ();
@@ -260,7 +261,8 @@ public class Character : MonoBehaviour {
 	public void IncreaseCombo()
 	{
 		combo++;
-		if (combo == 1)
+		var uic = UserInterface.instance.combo;
+		if (uic.color != Color.white)
 		{
 			UserInterface.instance.combo.DOColor(Color.white,0.5f);
 		}

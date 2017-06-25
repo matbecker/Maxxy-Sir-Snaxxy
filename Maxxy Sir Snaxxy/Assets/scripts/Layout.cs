@@ -19,6 +19,8 @@ public class Layout : MonoBehaviour {
 		public Transform[] columns;
 		public Transform csp;
 		public float rotation;
+		public Vector2 fallingSpeed;
+		public Vector3[] UIpositions;
 	}
 	public Screen[] layouts;
 	public int screenIndex;
@@ -191,21 +193,19 @@ public class Layout : MonoBehaviour {
 			{
 			case ScreenState.Bottom:
 				c.transform.DORotate(Vector3.zero, 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-				c.SetFallingSpeed(0.0f,-1.0f);
 				break;
 			case ScreenState.Right:
 				c.transform.DORotate(new Vector3(0.0f,0.0f,90.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-				c.SetFallingSpeed(1.0f,0.0f);
 				break;
 			case ScreenState.Top:
 				c.transform.DORotate(new Vector3(0.0f,0.0f,180.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-				c.SetFallingSpeed(0.0f,1.0f);
 				break;
 			case ScreenState.Left:
 				c.transform.DORotate(new Vector3(0.0f,0.0f,270.0f), 0.5f, RotateMode.Fast).SetEase(Ease.OutBack,1.0f,0.5f);
-				c.SetFallingSpeed(-1.0f,0.0f);
 				break;
 			}
+			//set the falling speed
+			c.SetFallingSpeed(GetCurrentScreen().fallingSpeed);
 			foreach (Node n in GetCurrentScreen().nodes)
 			{
 				n.gameObject.SetActive(true);
@@ -232,7 +232,7 @@ public class Layout : MonoBehaviour {
 					if (bq.transform.localScale.y > 0.5f)
 					{
 						//transform quadrants 
-						bq.transform.DOScaleY(0.34f,0.5f).OnComplete(() => {
+						bq.transform.DOScaleY(0.3333f,0.5f).OnComplete(() => {
 							bq.transform.DOScaleX(3.0f,0.5f);
 						});
 					}
@@ -240,6 +240,7 @@ public class Layout : MonoBehaviour {
 			}
 			SequenceManager.instance.AdjustSequenceSpeed(0.0f);
 			c.SetScoreTextRotation(GetCurrentScreen().rotation);
+			UserInterface.instance.MoveUI(false);
 			c.transform.DOMove(GetCurrentScreen().startPoint.position, 0.0f).OnComplete(() => {
 				c.Resize();
 			});

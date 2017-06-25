@@ -86,12 +86,14 @@
      <Compile Include="Assets\scripts\GameManager.cs" />
      <Compile Include="Assets\scripts\GameoverScreen.cs" />
      <Compile Include="Assets\scripts\HelperFunctions.cs" />
+     <Compile Include="Assets\scripts\HighScoreMenu.cs" />
      <Compile Include="Assets\scripts\Layout.cs" />
      <Compile Include="Assets\scripts\MainMenu.cs" />
      <Compile Include="Assets\scripts\MobileController.cs" />
      <Compile Include="Assets\scripts\Node.cs" />
      <Compile Include="Assets\scripts\Sequence.cs" />
      <Compile Include="Assets\scripts\SequenceManager.cs" />
+     <Compile Include="Assets\scripts\SliderBar.cs" />
      <Compile Include="Assets\scripts\UserInterface.cs" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\DemiGiant\DOTweenPro\readme.txt" />
